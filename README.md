@@ -68,6 +68,7 @@ The following may loosen requirements, but may not be desirable as they would al
 1. Loosen requirements to allow `<span>` on primitives within object keys or object or array keys or values. Currently, the shortest possible expression is required?
 1. Loosen requirements to allow an explicit itemprop="string", itemprop="array", and/or itemprop="object"?
 1. Require primitives to be within `<data>` elements (but the HTML spec currently requires a `value` attribute which would be redundant with the human-readable value so `<span>` is being used instead)
+1. Allow `<table>` to be used in place of nested `<ol>` arrays especially when there are only two dimensions and the arrays are known to be of equal length at each level (any `<thead>` for visual purposes only but not converted to JSON?).
 
 The following are possible tightening changes:
 1. Disallow comment and processing instruction nodes? Despite the precedent with JSON disallowing comments, I am partial to allowing comment nodes in JHTML, despite the burden on implementers, as it is extremely convenient to be able to include such information within data files. Of course, they will not be round-trippable with JSON (unless encoded as a legitimate part of the JSON object) since JSON disallows comments.
