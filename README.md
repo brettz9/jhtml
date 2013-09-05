@@ -25,9 +25,12 @@ Currently, comment (and processing instructions) and whitespace text nodes are a
 ```
 
 ```javascript
-// The following code will look for all elements within the document belonging to the JHTML itemtype namespace (currently `http://brett-zamir.me/ns/microdata/json-as-html/1`).
-// Alternatively, one may supply the items as the first (and only) argument (there is no validation for namespace currently
-in such a case).
+// The following code will look for all elements within the document
+// belonging to the JHTML itemtype namespace (currently:
+// http://brett-zamir.me/ns/microdata/json-as-html/1 ).
+// Alternatively, one may supply the items as the first (and only)
+// argument (there is no validation for namespace currently
+// in such a case).
 // These return a JSON array if multiple elements are found or a single object otherwise
 JHTML.toJSONObject(); // returns a JSON object
 JHTML.toJSONString(); // returns a JSON string
