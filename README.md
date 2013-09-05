@@ -9,6 +9,8 @@ Possible use cases include:
 
 JHTML ought to be round-trippable with canonical JSON except in the case when converting *from* object-containing JSON to JHTML when the ECMAScript/JSON interpreter does not iterate the properties in definition order (as ECMAScript interpreters are not obliged to do).
 
+See a **[demo here](http://brettz9.github.io/jhtml/)**.
+
 # Rules
 
 Currently, comment (and processing instructions) and whitespace text nodes are allowed throughout, but any elements must be constrained to the expected types. For canonicalization, attributes beyond those explicitly allowed should not be present. Microdata might not care about hierarchy, but this specification adds such constraints.
