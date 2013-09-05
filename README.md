@@ -52,7 +52,7 @@ If you intend to support older browsers, you will need polyfills for:
 The following might perhaps be allowed in conjunction with [JSON Schema](http://json-schema.org/), although I would also like to allow optional encoding of non-JSON JavaScript objects as well.
 
 1. This could be expanded to support types like: undefined, function, URL, date, etc.
-1. Support a special HTML-aware string type to allow arbitrary nested HTML where JSON strings are expected (which might be encapsulated say by a <div itemprop="html">). This could still convert to JSON, but as a string.
+1. Support a special HTML-aware string type to allow arbitrary nested HTML where JSON strings are expected (which might be encapsulated say by a `<div itemprop="html">`). This could still convert to JSON, but as a string.
 1. Could use itemid/itemref to encode linked references
 
 # Possible future spec modifications
@@ -62,7 +62,7 @@ The following may loosen requirements, but may not be desirable as they would al
 1. Loosen requirements to always use `<ol start="0">`? For portable proper structural readability, however, this seems like it should stay, even though CSS can mimic the correct 0-indexed display.
 1. Loosen requirements to allow `<span>` on primitives within object keys or object or array keys or values. Currently, the shortest possible expression is required?
 1. Loosen requirements to allow an explicit itemprop="string", itemprop="array", and/or itemprop="object"?
-1. Require primitives to be within <data> elements (but the HTML spec currently requires a `value` attribute which would be redundant with the human-readable value so <span> is being used instead)
+1. Require primitives to be within `<data>` elements (but the HTML spec currently requires a `value` attribute which would be redundant with the human-readable value so `<span>` is being used instead)
 
 The following are possible tightening changes:
 1. Disallow comment and processing instruction nodes? Despite the precedent with JSON disallowing comments, I am partial to allowing comment nodes in JHTML, despite the burden on implementers, as it is extremely convenient to be able to include such information within data files. Of course, they will not be round-trippable with JSON (unless encoded as a legitimate part of the JSON object) since JSON disallows comments.
@@ -70,7 +70,7 @@ The following are possible tightening changes:
 The following are other possible changes:
 
 1. Change the itemtype namespace
-1. Allow multiple <dd>'s if taken to mean array children? (Probably more confusing even if more succinct than requiring a child <ol>)
+1. Allow multiple `<dd>`'s if taken to mean array children? (Probably more confusing even if more succinct than requiring a child `<ol>`)
 1. Anything else that comes up out of consultation with others (although I intend to change the namespace upon any breaking changes)
 
 # Inspiration
