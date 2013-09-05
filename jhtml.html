@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http:/www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>JHTML demo</title>
+    <link rel="stylesheet" type="text/css" href="jhtml.css" />
+    <script src="jhtml.js"></script>
+</head>
+<body>
+
+<dl itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/1">
+    <dt>string-key</dt>
+    <dd>a string (no itemprop needed for this primitive as string is the default)</dd>
+    <dt>boolean-key</dt>
+    <dd itemprop="boolean">false</dd>
+    <dt>number-key</dt>
+    <dd itemprop="number">3</dd>
+    <dt>null-key</dt>
+    <dd itemprop="null">null</dd>
+    <dt>array-key</dt>
+    <dd>
+        <ol start="0">
+            <li>arr item 1</li>
+            <li itemprop="boolean">true</li>
+            <li>arr item 3</li>
+        </ol>
+    </dd>
+    <dt>object-key</dt>
+    <dd>
+        <dl>
+            <dt>nested-key-1</dt>
+            <dd>Some (string) value</dd>
+            <dt>nested-key-2</dt>
+            <dd>Another (string) value</dd>
+        </dl>
+    </dd>
+</dl>
+
+<textarea id="JHTML-output" rows="3" cols="100"></textarea>
+<script>
+document.getElementById('JHTML-output').value = JHTML.toJSONString();
+</script>
+
+</body>
+</html>

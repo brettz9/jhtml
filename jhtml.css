@@ -1,0 +1,28 @@
+*[itemtype="http://brett-zamir.me/ns/microdata/json-as-html/1"] {
+    background-color:beige;
+}
+
+/*
+To be more careful (esp. for those rules not using
+itemprop or with itemprop not present), we could
+namespace all of these under:
+    *[itemtype="http://brett-zamir.me/ns/microdata/json-as-html/1"]
+*/
+
+dt {font-style:italic; color: green;}
+*[itemprop="number"] {color:darkorange;}
+*[itemprop="boolean"] {color:blue;}
+*[itemprop="null"] {color:gray;}
+dd:not([itemprop]) {color:red;}
+dd:not([itemprop]) > ol {color:purple;}
+
+
+/*
+This works but we don't want to encourage <ol> being moved around without @start
+ol { counter-reset: item -1}
+li { list-style-type: none; }
+li:before {
+    content: counter(item) ". ";
+    counter-increment: item;
+}
+*/
