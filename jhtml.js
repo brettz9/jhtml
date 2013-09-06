@@ -1,9 +1,12 @@
-/*globals exports*/
+/*globals SAJJ, ObjectArrayDelegator, DOMParser, exports */
+/*jslint todo: true */
 /**
 * JHTML is a format which can represent arbitrary JSON structures in a faithful, human-readable, and portable manner.
 * It is also round-trippable except in the case when converting *from* object-containing JSON to JHTML when the
 * ECMAScript/JSON interpreter does not iterate the properties in definition order (as it is not required to do)
 * @namespace Contains methods for conversions between JSON and JHTML (as strings or objects)
+* @requires SAJJ
+* @requires ObjectArrayDelegator
 * @requires polyfill: Array.prototype.map
 * @requires polyfill: Array.prototype.reduce
 * @requires polyfill: Element.prototype.textContent
@@ -125,7 +128,91 @@
                 }, '[').replace(/,$/, '') + ']';
         }
     }
-    var exp;
+    function escapeHTMLText (str) {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    }
+    var exp,
+        jhtmlNs = 'http://brett-zamir.me/ns/microdata/json-as-html/1',
+        JHTMLStringifier = SAJJ.createAndReturn({inherits: ObjectArrayDelegator, methods: {
+
+// JSON terminal handler methods
+
+// These four methods can be overridden without affecting the logic of the objectHandler and arrayHandler to utilize
+//   reporting of the object as a whole
+beginObjectHandler: function beginObjectHandler (value, parentObject, parentKey, parentObjectArrayBool) {
+    return '<dl' + (parentObject ? '' : ' itemscope="" itemtype="' + jhtmlNs + '"') + '>';
+},
+endObjectHandler: function endObjectHandler (value, parentObject, parentKey, parentObjectArrayBool) {
+    return '</dl>';
+},
+beginArrayHandler: function beginArrayHandler (value, parentObject, parentKey, parentObjectArrayBool) {
+    return '<ol start="0"' + (parentObject ? '' : ' itemscope="" itemtype="' + jhtmlNs + '"') + '>';
+},
+endArrayHandler: function endArrayHandler (value, parentObject, parentKey, parentObjectArrayBool) {
+    return '</ol>';
+},
+
+// JSON terminal key handler methods
+
+objectKeyHandler: function (key, parentObject, parentKey, parentObjectArrayBool, iterCt) {
+    return '<dt>' + escapeHTMLText(key) + '</dt>';
+},
+arrayKeyHandler: function (key, parentObject, parentKey, parentObjectArrayBool) {
+    return '';
+},
+
+// JSON terminal joiner handler methods
+
+objectKeyValueJoinerHandler: function objectKeyValueJoinerHandler () {
+    return '';
+},
+arrayKeyValueJoinerHandler: function arrayKeyValueJoinerHandler () {
+    return '';
+},
+
+// JSON terminal primitive handler methods
+
+nullHandler: function nullHandler (parentObject, parentKey, parentObjectArrayBool) {
+    return ' itemprop="null">' + 'null';
+},
+booleanHandler: function booleanHandler (value, parentObject, parentKey, parentObjectArrayBool) {
+    return ' itemprop="boolean">' + String(value);
+},
+numberHandler: function numberHandler (value, parentObject, parentKey, parentObjectArrayBool) {
+    return ' itemprop="number">' + String(value);
+},
+stringHandler: function stringHandler (value, parentObject, parentKey, parentObjectArrayBool) {
+    return '>' + escapeHTMLText(value);
+},
+
+// JavaScript-only (non-JSON) (terminal) handler methods (not used or required for JSON mode)
+functionHandler: function functionHandler (value, parentObject, parentKey, parentObjectArrayBool) {
+    return ' itemprop="function">' + escapeHTMLText(value.toString()); // May not be supported everywhere
+},
+undefinedHandler: function undefinedHandler (parentObject, parentKey, parentObjectArrayBool) {
+    return ' itemprop="undefined">' + 'undefined';
+},
+nonfiniteNumberHandler: function nonfiniteNumberHandler (value, parentObject, parentKey, parentObjectArrayBool) {
+    return ' itemprop="number">' + String(value);
+},
+
+objectValueHandler: function objectValueHandler (value, key, parentObject, parentKey, parentObjectArrayBool, iterCt) {
+    return '<dd' + (value && typeof value === 'object' ? '>' : '') + this.delegateHandlersByType(value, parentObject, parentKey, parentObjectArrayBool) + '</dd>';
+},
+arrayValueHandler: function arrayValueHandler (value, key, parentObject, parentKey, parentObjectArrayBool) {
+    return '<li' + this.delegateHandlersByType(value, parentObject, parentKey, parentObjectArrayBool) + '</li>';
+},
+
+beginHandler: function (obj, parObj, parKey, parObjArrBool) {
+    return obj && typeof obj === 'object' ? '' : '<span itemscope="" itemtype="' + jhtmlNs + '"';
+},
+endHandler: function (obj, parObj, parKey, parObjArrBool) {
+    return obj && typeof obj === 'object' ? '' : '</span>';
+}
+
+
+        }});
+
     if (typeof exports === 'undefined') {
         window.JHTML = {};
         exp = window.JHTML;
@@ -141,14 +228,19 @@
     * We don't validate that other attributes are not present, but they should not be
     */
     exp.toJSONString = function (items) {
-        var jsonHtml = items || document.getItems('http://brett-zamir.me/ns/microdata/json-as-html/1'),
+        var jsonHtml = items || document.getItems(jhtmlNs),
             ret = [].map.call(jsonHtml, item2JSONString);
         return ret.length === 1 ? ret[0] : '[' + ret.join(',') + ']';
     };
-    exp.toJHTMLDOM = function () {
-        throw 'Not yet implemented';
+    exp.toJHTMLDOM = function (jsonObj) {
+        var jhtmlStr = this.toJHTMLString(jsonObj);
+        return new DOMParser().parseFromString(jhtmlStr, 'text/html');
     };
-    exp.toJHTMLString = function () {
-        throw 'Not yet implemented';
+    exp.toJHTMLString = function (jsonObj, options) {
+        options = options || {};
+        options.distinguishKeysValues = true;
+        var jhtmlStringifier = new JHTMLStringifier(options);
+        return jhtmlStringifier.walkJSONObject(jsonObj);
     };
+
 }());

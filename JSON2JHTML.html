@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>JSON2JHTML test</title>
+    <script src="SAJJ/SAJJ.js"></script>
+    <script src="SAJJ/SAJJ.ObjectArrayDelegator.js"></script>
+    <script src="jhtml.js"></script>
+    <script src="jtml.testing.js"></script>
+</head>
+<body>
+<script>
+
+validateAndWrite(JHTML.toJHTMLString(null));
+validateAndWrite(JHTML.toJHTMLString(true));
+validateAndWrite(JHTML.toJHTMLString(4e5));
+validateAndWrite(JHTML.toJHTMLString('abc'));
+write('');
+validateAndWrite(JHTML.toJHTMLString(['childItem', 'childWith"Dbl"Quotes']));
+write('');
+validateAndWrite(
+    JHTML.toJHTMLString({a: null, b: true, c: 3, d: ['childItem', 'childWith"Dbl"Quotes'], e: {nested: true}, f: Infinity})
+);
+write('');
+validateAndWrite(
+    JHTML.toJHTMLString({a: null, b: true, c: 3, d: ['childItem', 'childWith"Dbl"Quotes'], e: {nested: true}, f: Infinity, g: undefined, h: function () {}}, {mode: 'JavaScript'})
+);
+
+</script>
+</body>
+</html>
