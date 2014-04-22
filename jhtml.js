@@ -107,7 +107,7 @@
                 return ret;
             case 'ol': // array
                 if (item.getAttribute('start') !== '0') {
-                    throw 'For the sake of readability, <ol> must include a start="0" attribute';
+                    throw 'For the sake of readability, <ol> must include a start="0" attribute within JHTML.';
                 }
                 // JSON allows empty arrays (and HTML allows empty <ol>'s) so we do also
                 return [].reduce.call(item.childNodes, function (prev, node) {
@@ -132,7 +132,7 @@
         return str.replace(/&/g, '&amp;').replace(/</g, '&lt;');
     }
     var exp,
-        jhtmlNs = 'http://brett-zamir.me/ns/microdata/json-as-html/1',
+        jhtmlNs = 'http://brett-zamir.me/ns/microdata/json-as-html/2',
         JHTMLStringifier = SAJJ.createAndReturn({inherits: ObjectArrayDelegator, methods: {
 
 // JSON terminal handler methods
@@ -173,41 +173,55 @@ arrayKeyValueJoinerHandler: function arrayKeyValueJoinerHandler () {
 // JSON terminal primitive handler methods
 
 nullHandler: function nullHandler (parentObject, parentKey, parentObjectArrayBool) {
-    return ' itemprop="null">' + 'null';
+    if (!parentObject) {
+        return 'null';
+    }
+    return '<i>null</i>';
 },
 booleanHandler: function booleanHandler (value, parentObject, parentKey, parentObjectArrayBool) {
-    return ' itemprop="boolean">' + String(value);
+    if (!parentObject) {
+        return String(value);
+    }
+    return '<i>' + String(value) + '</i>';
 },
 numberHandler: function numberHandler (value, parentObject, parentKey, parentObjectArrayBool) {
-    return ' itemprop="number">' + String(value);
+    if (!parentObject) {
+        return String(value);
+    }
+    return '<i>' + String(value) + '</i>';
 },
 stringHandler: function stringHandler (value, parentObject, parentKey, parentObjectArrayBool) {
-    return '>' + escapeHTMLText(value);
+    if (!parentObject) {
+        return escapeHTMLText(value);
+    }
+    return escapeHTMLText(value);
 },
 
 // JavaScript-only (non-JSON) (terminal) handler methods (not used or required for JSON mode)
 functionHandler: function functionHandler (value, parentObject, parentKey, parentObjectArrayBool) {
-    return ' itemprop="function">' + escapeHTMLText(value.toString()); // May not be supported everywhere
+    return '<i>' + escapeHTMLText(value.toString()) + '</i>'; // May not be supported everywhere
 },
 undefinedHandler: function undefinedHandler (parentObject, parentKey, parentObjectArrayBool) {
-    return ' itemprop="undefined">' + 'undefined';
+    return '<i>undefined</i>';
 },
 nonfiniteNumberHandler: function nonfiniteNumberHandler (value, parentObject, parentKey, parentObjectArrayBool) {
-    return ' itemprop="number">' + String(value);
+    return '<i>' + String(value) + '</i>';
 },
 
 objectValueHandler: function objectValueHandler (value, key, parentObject, parentKey, parentObjectArrayBool, iterCt) {
-    return '<dd' + (value && typeof value === 'object' ? '>' : '') + this.delegateHandlersByType(value, parentObject, parentKey, parentObjectArrayBool) + '</dd>';
+    return '<dd>' + this.delegateHandlersByType(value, parentObject, parentKey, parentObjectArrayBool) + '</dd>';
 },
 arrayValueHandler: function arrayValueHandler (value, key, parentObject, parentKey, parentObjectArrayBool) {
-    return '<li' + this.delegateHandlersByType(value, parentObject, parentKey, parentObjectArrayBool) + '</li>';
+    return '<li>' + this.delegateHandlersByType(value, parentObject, parentKey, parentObjectArrayBool) + '</li>';
 },
 
 beginHandler: function (obj, parObj, parKey, parObjArrBool) {
-    return obj && typeof obj === 'object' ? '' : '<span itemscope="" itemtype="' + jhtmlNs + '"';
+    var objType = typeof obj;
+    return obj && objType === 'object' ? '' : '<' + (['boolean', 'object', 'number'].indexOf(objType) > -1 ? 'i' : 'span') + ' itemscope="" itemtype="' + jhtmlNs + '">';
 },
 endHandler: function (obj, parObj, parKey, parObjArrBool) {
-    return obj && typeof obj === 'object' ? '' : '</span>';
+    var objType = typeof obj;
+    return obj && objType === 'object' ? '' : '</' + (['boolean', 'object', 'number'].indexOf(objType) > -1 ? 'i' : 'span') + '>';
 }
 
 
