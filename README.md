@@ -24,7 +24,7 @@ Currently, comment (and processing instructions) and whitespace text nodes are a
 # Design choices
 
 1. Adding null, boolean, and numbers (if not object keys) be within `<i>` visually distinguishes them from strings of the same value. Although this adds some verbosity, and it would technically be possible with CSS to overcome this need, without it, bare HTML would not allow distinguishment between primitive types.
-1. I did not require (or even allow) itemprop usage in this version, as it is unnecessarily cumbersome.
+1. I did not require (or even allow) itemprop usage in this version, as it is unnecessarily cumbersome, and would also not be visible within WYSIWYG editors (and thus more prone to error).
 
 # Usage
 
@@ -62,7 +62,7 @@ If you intend to support older browsers, you will need polyfills for:
 The following might perhaps be allowed in conjunction with [JSON Schema](http://json-schema.org/), although I would also like to allow optional encoding of non-JSON JavaScript objects as well.
 
 1. This could be expanded to support types like: URL, Date, etc.
-1. Support a special HTML-aware string type to allow arbitrary nested HTML where JSON strings are expected (which might be encapsulated say by a `<div itemprop="html">`). This could still convert to JSON, but as a string.
+1. Support a special HTML-aware string type to allow arbitrary nested HTML where JSON strings are expected (which might be encapsulated say by a `<a itemprop="html">`). This could still convert to JSON, but as a string.
 1. Could use itemid/itemref to encode linked references
 
 # Possible future spec modifications
@@ -70,14 +70,14 @@ The following might perhaps be allowed in conjunction with [JSON Schema](http://
 The following may loosen requirements, but may not be desirable as they would allow expansion of the size of JHTML files.
 
 1. Loosen requirements to allow dropping the start attribute in `<ol start="0">`? For portable proper structural readability, however, this seems like it should stay, even though CSS can mimic the correct 0-indexed display.
-1. Loosen requirements to allow `<span>` on primitives within object keys or object or array keys or values. Currently, the shortest possible expression is required behavior.
-1. Loosen requirements to allow explicit `itemprop="string"`, `itemprop="array"`, `itemprop="object"`, etc.?
+1. Loosen requirements to allow `<span>` on string primitives (for parity with a string at the root) within object keys or object or array keys or values. Currently, the shortest possible expression is required behavior.
 1. Allow `<table>` to be used in place of nested `<ol>` arrays especially when there are only two dimensions and the arrays are known to be of equal length at each level (any `<thead>` for visual purposes only but not converted to JSON?).
 
 The following are possible tightening or other breaking changes:
 
 1. Disallow comment and processing instruction nodes? Despite the precedent with JSON disallowing comments, I am partial to allowing comment nodes in JHTML, despite the burden on implementers, as it is extremely convenient to be able to include such information within data files. Of course, they will not be round-trippable with JSON (unless encoded as a legitimate part of the JSON object) since JSON disallows comments.
-1. Require primitives to be within `<data>` elements (but the HTML spec currently requires a `value` attribute which would be redundant with the human-readable value so `<span>` is being used instead)
+1. Require primitives to be within `<data>` elements (but the HTML spec currently requires a `value` attribute which would be redundant with the human-readable value).
+1. Change the Microdata attributes on the root to "data-\*" attributes since the information is not necessarily semantic (and if it is, it is semantic to the specific JSON format). Although the "data-\*" attributes are supposed to only have meaning within the application (e.g., not to be interpreted in a special way by search engines perhaps), their use would not imply that tools could not parse them in a similar manner.
 
 The following are other possible changes:
 
