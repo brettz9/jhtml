@@ -62,7 +62,7 @@ If you intend to support older browsers, you will need polyfills for:
 The following might perhaps be allowed in conjunction with [JSON Schema](http://json-schema.org/), although I would also like to allow optional encoding of non-JSON JavaScript objects as well.
 
 1. This could be expanded to support types like: URL, Date, etc.
-1. Support a special HTML-aware string type to allow arbitrary nested HTML where JSON strings are expected (which might be encapsulated say by a `<a itemprop="html">`). This could still convert to JSON, but as a string.
+1. Support a special HTML-aware string type to allow arbitrary nested HTML where JSON strings are expected (which might be encapsulated say by a `<a>`). This could still convert to JSON, but as a string.
 1. Could use itemid/itemref to encode linked references
 
 # Possible future spec modifications
