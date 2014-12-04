@@ -44,6 +44,14 @@ JHTML.toJSONObject(); // returns a JSON object
 JHTML.toJSONString(); // returns a JSON string
 ```
 
+Note that if you wish to store the JHTML without displaying it,
+you can enclose it within a `<script type="jhtml">` element and
+obtain the content via script (though you could also obtain
+regular JSON in a similar manner or simply use JSON within
+your JavaScript). Do not merely add the style `display:none` as
+this will still cause your JHTML content to display for users
+who have disabled CSS.
+
 If you intend to support older browsers, you will need polyfills for:
 
 1. Array.prototype.map
