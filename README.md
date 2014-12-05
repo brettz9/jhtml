@@ -6,7 +6,7 @@ Possible use cases include:
 
 1. Hierarchical data storage in a faithful, readily portable and readily viewable format.
 1. Allow building of data files within (schema-constrained) WYSIWYG editors
-1. Transforming JSON to XHTML for applying XSL, running XPath queries, etc.
+1. Transforming JSON to XHTML for applying XSL, running XPath, CSS Selector, or DOM queries, etc.
 
 JHTML ought to be round-trippable with canonical JSON except in the case when converting *from* object-containing JSON to JHTML when the ECMAScript/JSON interpreter does not iterate the properties in definition order (as ECMAScript interpreters are not obliged to do).
 
