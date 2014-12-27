@@ -10,6 +10,10 @@ Possible use cases include:
 
 JHTML ought to be round-trippable with canonical JSON except in the case when converting *from* object-containing JSON to JHTML when the ECMAScript/JSON interpreter does not iterate the properties in definition order (as ECMAScript interpreters are not obliged to do).
 
+Note that when script tags of custom type are available (e.g., &lt;script type="application/json"&gt;) it is probably easier to use them with JSON directly.
+
+For representing XML as HTML, see [hxml](https://github.com/brettz9/hxml).
+
 See a **[demo here](http://brettz9.github.io/jhtml/)**.
 
 # Rules
@@ -26,6 +30,7 @@ Currently, comment (and processing instructions) and whitespace text nodes are a
 
 1. Adding null, boolean, and numbers (if not object keys) be within `<i>` visually distinguishes them from strings of the same value. Although this adds some verbosity, and it would technically be possible with CSS to overcome this need, without it, bare HTML would not allow distinguishment between primitive types.
 1. I did not require (or even allow) itemprop usage in this version, as it is unnecessarily cumbersome, and would also not be visible within WYSIWYG editors (and thus more prone to error).
+1. It should potentially be able to accommodate other JavaScript objects (e.g., `undefined`, function (via `toString()`, non-finite numbers, date objects, and regular expression objects ought to appear within &lt;i&gt; without ambiguity).
 
 # Usage
 
