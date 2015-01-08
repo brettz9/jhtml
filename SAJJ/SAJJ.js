@@ -4,8 +4,8 @@
 * SAJJ Simple API for JSON/JavaScript objects
 * This is not intended as a streaming string parser, though walkJSONString() is provided for whole strings; 
 *  Clarinet (https://github.com/dscape/clarinet ) is more likely the better choice for such cases.
-*  SAJJ, as with SAX, could be adapted to allow DOM TreeWalker-style parsing (pull or automatic cycling) along with
-*  XSL-style iteration (though optional whether to ultimately replace original content), e.g., for use with Jamilih or JsonML style 
+*  SAJJ, as with SAX, could be adapted to allow DOM TreeWalker-style parsing (pull or automatic cycling: todo) along with
+*  XSL-style iteration (though optional whether to ultimately replace original content), e.g., for use with Jamilih or JsonML style (see JTLT project)
 *  templates (or enhanced via full JS with event handlers)
 * @SampleUseCases
 1) Converting JavaScript structures to JSON
@@ -28,10 +28,11 @@
         allowed easily in stringHandler
     b) lowercase and xmlns seem too XML-specific
     c) position has analogue in JSONPath goal
-8. Decided against causing conversion to string and feeding into Clarinet as use cases of beginning 
-    with JSON rather than merely converting to it were too great (toward JS as main environment or even content-type).
-9. Decided against Clarinet handler names as considered ugly relative to CamelCase (despite JS-event-style-familiarity)
-10. Decided against passing Object.keys (or other exports of Object properties like getOwnPropertyNames) 
+8. Decided against causing conversion to string and feeding into Clarinet (or `JSON.parse(obj, reviver);`) as use cases
+    of beginning with JSON rather than merely converting to it were too great (toward JS as main environment or even content-type).
+9. Decided against Clarinet handler names as considered ugly relative to CamelCase (despite JS-event-style-familiarity) though
+I may provide adapters later (todo)
+10. Decided against passing Object.keys (or other exports of Object properties like getOwnPropertyNames)
     to beginObjectHandler/beginArrayHandler (and corresponding end methods) as auto-iteration of 
     keys/values ought to address most use cases for obtaining all keys and user can do it themselves 
     if needed. We did pass length of array to begin and endArrayHandler, however.
