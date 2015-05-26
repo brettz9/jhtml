@@ -28,14 +28,14 @@ var exports;
         // Todo: also ignore nodes like comments or processing instructions? (A mistake of JSON?); we might even convert comments into JavaScript comments if this is used in a non-JSON-restricted JavaScript environment
         return node.nodeType !== 1; // Not an element (ignore comments, whitespace text nodes, etc.)
     }
-    function item2JSONString (item, throwOnSpan) {
+    function item2JSONObject (item, throwOnSpan) {
         function getHarmlessChildNodes (node) {
             return function (prev, childNode) {
                 if (ignoreHarmlessNonelementNodes(childNode, node)) {
                     return prev;
                 }
                 // As per check above, will be exactly one element node in this batch
-                return prev + item2JSONString(childNode, true);
+                return prev + item2JSONObject(childNode, true);
             };
         }
         var ret, state, textContent = item.textContent, topLevelJSONElement = item.nodeName.toLowerCase();
@@ -44,7 +44,7 @@ var exports;
                 if (throwOnSpan) {
                     throw 'A <span> element is not allowed in this context';
                 }
-                return JSON.stringify(textContent);
+                return textContent;
             case 'i': // null, boolean, number (or undefined, function, non-finite number, Date or RegExp object)
                 switch (textContent) {
                     case 'null':
@@ -53,8 +53,9 @@ var exports;
                         return true;
                     case 'false':
                         return false;
+// Todo: check option on whether allowing non-JSON
                     // Non-JSON
-                    case undefined:
+                    case 'undefined':
                         return undefined;
                     case 'Infinity':
                         return Infinity;
@@ -109,7 +110,7 @@ var exports;
                         throw '<dd> should not have more than one child';
                     }
                     if (!node.children.length) {
-                        return prev + getJSONFromItemProp(node) + ',';
+                        return prev + JSON.stringify(node.textContent) + ',';
                     }
                     return prev + [].reduce.call(node.childNodes, getHarmlessChildNodes(node), '') + ',';
                 }, '{').replace(/,$/, '') + '}';
@@ -134,7 +135,7 @@ var exports;
                         throw '<li> should not have more than a single <ol> or <dl> child';
                     }
                     if (!node.children.length) {
-                        return prev + getJSONFromItemProp(node) + ',';
+                        return prev + JSON.stringify(node.textContent) + ',';
                     }
                     return prev + node.childNodes.reduce(getHarmlessChildNodes(node), '') + ',';
                 }, '[').replace(/,$/, '') + ']';
