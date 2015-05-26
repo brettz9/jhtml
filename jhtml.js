@@ -15,6 +15,7 @@
 * @todo Finish unimplemented methods
 * @todo Add polyfills, e.g., https://github.com/termi/Microdata-JS/
 */
+var exports;
 (function () {'use strict';
     function ignoreHarmlessNonelementNodes (node, item) {
         if (
@@ -66,13 +67,53 @@
                 return prev + item2JSONString(childNode, true);
             };
         }
-        var ret, state, topLevelJSONElement = item.nodeName.toLowerCase();
+        var ret, state, textContent = item.textContent, topLevelJSONElement = item.nodeName.toLowerCase();
         switch (topLevelJSONElement) {
             case 'span':
                 if (throwOnSpan) {
                     throw 'A <span> element is not allowed in this context';
                 }
-                return getJSONFromItemProp(item);
+                return JSON.stringify(textContent);
+            case 'i': // null, boolean, number (or undefined, function, non-finite number, Date or RegExp object)
+                switch (textContent) {
+                    case 'null':
+                        return null;
+                    case 'true':
+                        return true;
+                    case 'false':
+                        return false;
+                    // Non-JSON
+                    case undefined:
+                        return undefined;
+                    case 'Infinity':
+                        return Infinity;
+                    case '-Infinity':
+                        return -Infinity;
+                    case 'NaN':
+                        return NaN;
+                    default:
+                        // number
+                        if ((/^\-?\d+(\.\d+)?(e\-?\d+)?$/i).test(textContent)) {
+                            return parseFloat(textContent);
+                        }
+                        // function
+                        var funcMatch = textContent.match(/^function \w*([\w, ]*) {([\s\S]*)}$/);
+                        if (funcMatch) {
+                            return Function.apply(null, funcMatch[1].split(/, /).concat(funcMatch[2]));
+                        }
+                        // Date
+                        if ((/^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) /).test(textContent)) {
+                            return new Date(Date.parse(textContent));
+                        }
+                        // RegExp
+                        var regexMatch = textContent.match(/^\/([\s\S]*)\/(g?)(i?)(m?)$/);
+                        if (regexMatch) {
+                            var flags = (regexMatch[2] ? 'g' : '') + (regexMatch[3] ? 'i' : '') + (regexMatch[4] ? 'm' : '');
+                            return new RegExp(regexMatch[1], flags);
+                        }
+                        break;
+                }
+                return;
             case 'dl': // object
                 // JSON allows empty objects (and HTML allows empty <dl>'s) so we do also
                 state = 'dt';
@@ -133,7 +174,8 @@
     }
     var exp,
         jhtmlNs = 'http://brett-zamir.me/ns/microdata/json-as-html/2',
-        JHTMLStringifier = SAJJ.createAndReturn({inherits: ObjectArrayDelegator, methods: {
+        JHTMLStringifier = SAJJ.createAndReturn({inherits: ObjectArrayDelegator, methods: 
+{
 
 // JSON terminal handler methods
 
@@ -227,7 +269,7 @@ endHandler: function (obj, parObj, parKey, parObjArrBool) {
 
         }});
 
-    if (typeof exports === 'undefined') {
+    if (exports === undefined) {
         window.JHTML = {};
         exp = window.JHTML;
     }
