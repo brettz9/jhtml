@@ -1,6 +1,6 @@
 # JHTML
 
-The JHTML format is a strict subset of HTML used to encode arbitrary JSON within HTML. This library seeks to provide conversions while simultaneously validating the indicated JHTML structure(s).
+The JHTML format is a strict subset of HTML used to encode arbitrary JSON (or full JavaScript objects) within HTML. This library seeks to provide conversions while simultaneously validating the indicated JHTML structure(s).
 
 Possible use cases include:
 

@@ -44,7 +44,7 @@ var exports;
                         return true;
                     case 'false':
                         return false;
-// Todo: check option on whether allowing non-JSON
+// Todo: check option on whether allowing non-JSON (ensure always allowing number below)
                     // Non-JSON
                     case 'undefined':
                         return undefined;
