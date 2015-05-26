@@ -12,8 +12,8 @@
 * @requires polyfill: Element.prototype.textContent
 * @requires polyfill: Element.prototype.itemProp
 * @requires polyfill: HTMLDocument.prototype.getItems
-* @todo Finish unimplemented methods
 * @todo Add polyfills, e.g., https://github.com/termi/Microdata-JS/
+* @todo Add option for stringification (JSON or JHTML) to provide indentation, etc.
 */
 var exports;
 (function () {'use strict';
@@ -27,35 +27,6 @@ var exports;
         }
         // Todo: also ignore nodes like comments or processing instructions? (A mistake of JSON?); we might even convert comments into JavaScript comments if this is used in a non-JSON-restricted JavaScript environment
         return node.nodeType !== 1; // Not an element (ignore comments, whitespace text nodes, etc.)
-    }
-    function getJSONFromItemProp (item) {
-        var textContent = item.textContent,
-            itemProp = item.itemProp.toString(); // FF for some reason doesn't convert to a string; item.getAttribute('itemprop'); // 
-        switch(itemProp) {
-            case 'null':
-                if (textContent !== 'null') {
-                    throw 'Invalid null value';
-                }
-                break;
-            case 'boolean':
-                if (textContent !== 'true' && textContent !== 'false') {
-                    throw 'Invalid boolean value';
-                }
-                break;
-            case 'number':
-                if (!textContent.match(/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:e(?:\+|-)?\d+)?$/i)) {
-                    throw 'Invalid number value';
-                }
-                break;
-            // case 'string': // Todo: Allow?
-            // case null: // Todo: Use this with getAttribute() but not .itemProp
-            case '': // Todo: Use this with .itemProp.toString() but not with with .itemProp
-            case undefined: // string is the default
-                return JSON.stringify(item.textContent);
-            default:
-                throw 'Unrecognized itemprop value: ' + itemProp;
-        }
-        return textContent;
     }
     function item2JSONString (item, throwOnSpan) {
         function getHarmlessChildNodes (node) {
@@ -93,7 +64,7 @@ var exports;
                         return NaN;
                     default:
                         // number
-                        if ((/^\-?\d+(\.\d+)?(e\-?\d+)?$/i).test(textContent)) {
+                        if ((/^\-?(?:0|[1-9]\d*)(?:\.\d+)?(?:e(?:\+|\-)?\d+)?$/i).test(textContent)) {
                             return parseFloat(textContent);
                         }
                         // function
