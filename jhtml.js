@@ -17,27 +17,7 @@
 */
 var exports;
 (function () {'use strict';
-    function ignoreHarmlessNonelementNodes (node, item) {
-        if (
-            (node.nodeType === 3 || node.nodeType === 4) && // Text or CDATA node
-            !node.nodeValue.match(/^\s*$/)
-        ) {
-            throw 'Non-whitespace text or CDATA nodes are not allowed directly within <' +
-                            item.nodeName.toLowerCase() + '>';
-        }
-        // Todo: also ignore nodes like comments or processing instructions? (A mistake of JSON?); we might even convert comments into JavaScript comments if this is used in a non-JSON-restricted JavaScript environment
-        return node.nodeType !== 1; // Not an element (ignore comments, whitespace text nodes, etc.)
-    }
     function item2JSONObject (item, throwOnSpan) {
-        function getHarmlessChildNodes (node) {
-            return function (prev, childNode) {
-                if (ignoreHarmlessNonelementNodes(childNode, node)) {
-                    return prev;
-                }
-                // As per check above, will be exactly one element node in this batch
-                return prev + item2JSONObject(childNode, true);
-            };
-        }
         var ret, state, textContent = item.textContent, topLevelJSONElement = item.nodeName.toLowerCase();
         switch (topLevelJSONElement) {
             case 'span':
@@ -89,8 +69,9 @@ var exports;
             case 'dl': // object
                 // JSON allows empty objects (and HTML allows empty <dl>'s) so we do also
                 state = 'dt';
-                var key, obj = {};
-                ret = [].forEach.call(item.childNodes, function (prev, node) {
+                ret = {};
+                var key;
+                [].forEach.call(item.childNodes, function (prev, node) {
                     if (ignoreHarmlessNonelementNodes(node, item)) {
                         return;
                     }
@@ -109,16 +90,16 @@ var exports;
                     // Can now only be a <dd>
                     state = 'dt';
                     if (node.children.length > 1) {
-                        throw '<dd> should not have more than one element child';
+                        throw '<dd> should not have more than one element child (<ol>, <dl>, or <i>)';
                     }
-                    if (!node.children.length) {
+                    if (!node.children.length) { // String
                         obj[key] = node.textContent;
                         return;
                     }
-                    if (node.textContent) {
+                    if ((/\S/).test(node.textContent)) {
                         throw 'There should be no text content inside of <dd> when there is an element child.';
                     }
-                    obj[key] = [].reduce.call(node.childNodes, getHarmlessChildNodes(node), '');
+                    obj[key] = item2JSONObject(node.children[0], true);
                     return;
                 });
                 if (state !== 'dt') {
@@ -130,7 +111,7 @@ var exports;
                     throw 'For the sake of readability, <ol> must include a start="0" attribute within JHTML.';
                 }
                 // JSON allows empty arrays (and HTML allows empty <ol>'s) so we do also
-                return [].reduce.call(item.childNodes, function (prev, node) {
+                [].forEach.call(item.childNodes, function (prev, node) {
                     if (ignoreHarmlessNonelementNodes(node, item)) {
                         return prev;
                     }
@@ -139,16 +120,17 @@ var exports;
                         throw 'Unexpected child of <ol> element: ' + nodeName;
                     }
                     if (node.children.length > 1) {
-                        throw '<li> should not have more than a single <ol> or <dl> child';
+                        throw '<li> should not have more than a single element child (<ol>, <dl>, or <i>)';
                     }
-                    if (!node.children.length) {
+                    if (!node.children.length) { // String
                         return prev + JSON.stringify(node.textContent) + ',';
                     }
-                    if (node.textContent) {
+                    if ((/\S/).test(node.textContent)) {
                         throw 'There should be no text content inside of <li> when there is an element child.';
                     }
                     return prev + node.childNodes.reduce(getHarmlessChildNodes(node), '') + ',';
-                }, '[').replace(/,$/, '') + ']';
+                });
+                return ret;
         }
     }
     function escapeHTMLText (str) {
