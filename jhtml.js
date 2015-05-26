@@ -89,9 +89,10 @@ var exports;
             case 'dl': // object
                 // JSON allows empty objects (and HTML allows empty <dl>'s) so we do also
                 state = 'dt';
-                ret = [].reduce.call(item.childNodes, function (prev, node) {
+                var key, obj = {};
+                ret = [].forEach.call(item.childNodes, function (prev, node) {
                     if (ignoreHarmlessNonelementNodes(node, item)) {
-                        return prev;
+                        return;
                     }
                     var nodeName = node.nodeName.toLowerCase();
                     if (state !== nodeName) {
@@ -102,18 +103,24 @@ var exports;
                             throw '<dt> should not have any children';
                         }
                         state = 'dd';
-                        return prev + JSON.stringify(node.textContent) + ':';
+                        key = node.textContent;
+                        return;
                     }
                     // Can now only be a <dd>
                     state = 'dt';
                     if (node.children.length > 1) {
-                        throw '<dd> should not have more than one child';
+                        throw '<dd> should not have more than one element child';
                     }
                     if (!node.children.length) {
-                        return prev + JSON.stringify(node.textContent) + ',';
+                        obj[key] = node.textContent;
+                        return;
                     }
-                    return prev + [].reduce.call(node.childNodes, getHarmlessChildNodes(node), '') + ',';
-                }, '{').replace(/,$/, '') + '}';
+                    if (node.textContent) {
+                        throw 'There should be no text content inside of <dd> when there is an element child.';
+                    }
+                    obj[key] = [].reduce.call(node.childNodes, getHarmlessChildNodes(node), '');
+                    return;
+                });
                 if (state !== 'dt') {
                     throw 'Ended a definition list without a final <dd> to match the previous <dt>.';
                 }
@@ -136,6 +143,9 @@ var exports;
                     }
                     if (!node.children.length) {
                         return prev + JSON.stringify(node.textContent) + ',';
+                    }
+                    if (node.textContent) {
+                        throw 'There should be no text content inside of <li> when there is an element child.';
                     }
                     return prev + node.childNodes.reduce(getHarmlessChildNodes(node), '') + ',';
                 }, '[').replace(/,$/, '') + ']';
