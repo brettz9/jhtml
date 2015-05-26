@@ -1,5 +1,5 @@
 /*globals SAJJ, ObjectArrayDelegator, DOMParser, exports */
-/*jslint todo: true */
+/*jslint todo: true, vars:true */
 /**
 * JHTML is a format which can represent arbitrary JSON structures in a faithful, human-readable, and portable manner.
 * It is also round-trippable except in the case when converting *from* object-containing JSON to JHTML when the
@@ -17,6 +17,17 @@
 */
 var exports;
 (function () {'use strict';
+    function ignoreHarmlessNonelementNodes (node, item) {
+        if (
+            (node.nodeType === 3 || node.nodeType === 4) && // Text or CDATA node
+            (/\S/).test(node.nodeValue)
+        ) {
+            throw 'Non-whitespace text or CDATA nodes are not allowed directly within <' +
+                            item.nodeName.toLowerCase() + '>';
+        }
+        // Todo: also ignore nodes like comments or processing instructions? (A mistake of JSON?); we might even convert comments into JavaScript comments if this is used in a non-JSON-restricted JavaScript environment
+        return node.nodeType !== 1; // Not an element (ignore comments, whitespace text nodes, etc.)
+    }
     function item2JSONObject (item, throwOnSpan) {
         var ret, state, textContent = item.textContent, topLevelJSONElement = item.nodeName.toLowerCase();
         switch (topLevelJSONElement) {
@@ -49,7 +60,7 @@ var exports;
                             return parseFloat(textContent);
                         }
                         // function
-                        var funcMatch = textContent.match(/^function \w*([\w, ]*) {([\s\S]*)}$/);
+                        var funcMatch = textContent.match(/^function \w*([\w, ]*) \{([\s\S]*)\}$/);
                         if (funcMatch) {
                             return Function.apply(null, funcMatch[1].split(/, /).concat(funcMatch[2]));
                         }
@@ -71,7 +82,7 @@ var exports;
                 state = 'dt';
                 ret = {};
                 var key;
-                [].forEach.call(item.childNodes, function (prev, node) {
+                [].forEach.call(item.childNodes, function (node) {
                     if (ignoreHarmlessNonelementNodes(node, item)) {
                         return;
                     }
@@ -93,13 +104,10 @@ var exports;
                         throw '<dd> should not have more than one element child (<ol>, <dl>, or <i>)';
                     }
                     if (!node.children.length) { // String
-                        obj[key] = node.textContent;
+                        ret[key] = node.textContent;
                         return;
                     }
-                    if ((/\S/).test(node.textContent)) {
-                        throw 'There should be no text content inside of <dd> when there is an element child.';
-                    }
-                    obj[key] = item2JSONObject(node.children[0], true);
+                    ret[key] = item2JSONObject(node.children[0], true);
                     return;
                 });
                 if (state !== 'dt') {
@@ -111,9 +119,9 @@ var exports;
                     throw 'For the sake of readability, <ol> must include a start="0" attribute within JHTML.';
                 }
                 // JSON allows empty arrays (and HTML allows empty <ol>'s) so we do also
-                [].forEach.call(item.childNodes, function (prev, node) {
+                [].forEach.call(item.childNodes, function (node) {
                     if (ignoreHarmlessNonelementNodes(node, item)) {
-                        return prev;
+                        return;
                     }
                     var nodeName = node.nodeName.toLowerCase();
                     if (nodeName !== 'li') {
@@ -123,12 +131,9 @@ var exports;
                         throw '<li> should not have more than a single element child (<ol>, <dl>, or <i>)';
                     }
                     if (!node.children.length) { // String
-                        return prev + JSON.stringify(node.textContent) + ',';
+                        ret.push(node.textContent);
                     }
-                    if ((/\S/).test(node.textContent)) {
-                        throw 'There should be no text content inside of <li> when there is an element child.';
-                    }
-                    return prev + node.childNodes.reduce(getHarmlessChildNodes(node), '') + ',';
+                    ret.push(item2JSONObject(node.children[0], true));
                 });
                 return ret;
         }
