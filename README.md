@@ -94,6 +94,7 @@ The following are possible tightening or other breaking changes:
 1. Disallow comment and processing instruction nodes? Despite the precedent with JSON disallowing comments, I am partial to allowing comment nodes in JHTML, despite the burden on implementers, as it is extremely convenient to be able to include such information within data files. Of course, they will not be round-trippable with JSON (unless encoded as a legitimate part of the JSON object) since JSON disallows comments.
 1. Require primitives to be within `<data>` elements (but the HTML spec currently requires a `value` attribute which would be redundant with the human-readable value).
 1. Change the Microdata attributes on the root to "data-\*" attributes since the information is not necessarily semantic (and if it is, it is semantic to the specific JSON format). Although the "data-\*" attributes are supposed to only have meaning within the application (e.g., not to be interpreted in a special way by search engines perhaps), their use would not imply that tools could not parse them in a similar manner.
+1. Move the `itemtype` properties to a container element such as `<a>` to avoid the need for an inconsistency with string requiring `<span>` at the top level.
 
 The following are other possible changes:
 
