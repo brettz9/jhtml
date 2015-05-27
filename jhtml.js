@@ -12,6 +12,7 @@
 * @requires polyfill: Element.prototype.textContent
 * @requires polyfill: Element.prototype.itemProp
 * @requires polyfill: HTMLDocument.prototype.getItems
+* @requires polyfill: Element.firstElementChild
 * @todo Add polyfills, e.g., https://github.com/termi/Microdata-JS/
 * @todo Add option for stringification (JSON or JHTML) to provide indentation, etc.
 * @todo Make SAJJ as separate repo and require

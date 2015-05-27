@@ -65,6 +65,7 @@ If you intend to support older browsers, you will need polyfills for:
 1. Element.prototype.textContent
 1. Element.prototype.itemProp
 1. HTMLDocument.prototype.getItems
+1. Element.firstElementChild
 
 # Possible future todos
 
