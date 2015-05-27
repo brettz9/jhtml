@@ -5,12 +5,23 @@
     <title>JSON2JHTML test</title>
     <script src="SAJJ/SAJJ.js"></script>
     <script src="SAJJ/SAJJ.ObjectArrayDelegator.js"></script>
+    <script src="SAJJ/SAJJ.Stringifier.js"></script>
     <script src="jhtml.js"></script>
     <script src="jtml.testing.js"></script>
 </head>
 <body>
 <p>See also this <a href="index.html">demo</a> on conversion from JHTML (into JSON).</p>
 <script>
+
+
+write(null === JHTML.toJSONObject([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">null</i>')]));
+write(true === JHTML.toJSONObject([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">true</i>')]));
+write(4e5 === JHTML.toJSONObject([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">4e5</i>')]));
+write('abc' === JHTML.toJSONObject([elementFromString('<span itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">abc</i>')]));
+write(undefined === JHTML.toJSONObject([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">undefined</i>')], {mode: 'JavaScript'}));
+write(Infinity === JHTML.toJSONObject([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">Infinity</i>')], {mode: 'JavaScript'}));
+write(typeof JHTML.toJSONObject([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">function () {}</i>')], {mode: 'JavaScript'}) === 'function');
+
 
 validateAndWrite(JHTML.toJHTMLString(null));
 validateAndWrite(JHTML.toJHTMLString(true));

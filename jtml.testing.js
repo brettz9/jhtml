@@ -22,3 +22,6 @@ function validateAndWrite (txt) {'use strict';
     validate(txt);
     write(txt);
 }
+function elementFromString (str) {
+    return new DOMParser().parseFromString(str, 'text/html').body.firstElementChild;
+}
