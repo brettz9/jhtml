@@ -228,11 +228,11 @@ arrayValueHandler: function arrayValueHandler (value, key, parentObject, parentK
 
 beginHandler: function (obj, parObj, parKey, parObjArrBool) {
     var objType = typeof obj;
-    return obj && objType === 'object' ? '' : '<' + (['boolean', 'object', 'number'].indexOf(objType) > -1 ? 'i' : 'span') + ' itemscope="" itemtype="' + jhtmlNs + '">';
+    return obj && objType === 'object' ? '' : '<' + (['boolean', 'object', 'number', 'function', 'undefined'].indexOf(objType) > -1 ? 'i' : 'span') + ' itemscope="" itemtype="' + jhtmlNs + '">';
 },
 endHandler: function (obj, parObj, parKey, parObjArrBool) {
     var objType = typeof obj;
-    return obj && objType === 'object' ? '' : '</' + (['boolean', 'object', 'number'].indexOf(objType) > -1 ? 'i' : 'span') + '>';
+    return obj && objType === 'object' ? '' : '</' + (['boolean', 'object', 'number', 'function', 'undefined'].indexOf(objType) > -1 ? 'i' : 'span') + '>';
 }
 
 
@@ -246,26 +246,26 @@ endHandler: function (obj, parObj, parKey, parObjArrBool) {
         exp = exports;
     }
 
-    exp.toJSONObject = function (items) {
+    exp.toJSONObject = function (items, allowJS) {
         return JSON.parse(this.toJSONString(items));
     };
     /**
     * We don't validate that other attributes are not present, but they should not be
     */
-    exp.toJSONString = function (items) {
+    exp.toJSONString = function (items, allowJS) {
         var jsonHtml = items || document.getItems(jhtmlNs),
             ret = [].map.call(jsonHtml, item2JSONString);
         return ret.length === 1 ? ret[0] : '[' + ret.join(',') + ']';
-    };
-    exp.toJHTMLDOM = function (jsonObj) {
-        var jhtmlStr = this.toJHTMLString(jsonObj);
-        return new DOMParser().parseFromString(jhtmlStr, 'text/html');
     };
     exp.toJHTMLString = function (jsonObj, options) {
         options = options || {};
         options.distinguishKeysValues = true;
         var jhtmlStringifier = new JHTMLStringifier(options);
         return jhtmlStringifier.walkJSONObject(jsonObj);
+    };
+    exp.toJHTMLDOM = function (jsonObj) {
+        var jhtmlStr = this.toJHTMLString(jsonObj);
+        return new DOMParser().parseFromString(jhtmlStr, 'text/html');
     };
 
 }());

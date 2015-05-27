@@ -16,6 +16,10 @@ validateAndWrite(JHTML.toJHTMLString(null));
 validateAndWrite(JHTML.toJHTMLString(true));
 validateAndWrite(JHTML.toJHTMLString(4e5));
 validateAndWrite(JHTML.toJHTMLString('abc'));
+validateAndWrite(JHTML.toJHTMLString(undefined, {mode: 'JavaScript'}));
+validateAndWrite(JHTML.toJHTMLString(Infinity, {mode: 'JavaScript'}));
+validateAndWrite(JHTML.toJHTMLString(function () {}, {mode: 'JavaScript'}));
+
 write('');
 validateAndWrite(JHTML.toJHTMLString(['childItem', 'childWith"Dbl"Quotes']));
 write('');
