@@ -68,8 +68,10 @@ If you intend to support older browsers, you will need polyfills for:
 
 # Possible future todos
 
+1. Reimplement JHTML.toJHTMLDOM() using [JTLT](https://github.com/brettz9/jtlt/) (when ready))
+1. Reimplement JHTML.toJHTMLString() using [JTLT](https://github.com/brettz9/jtlt/) (when ready))
 1. Define as ECMAScript 6 Module with polyfill plug-in
-1. Allow equivalents to JSON.parse's reviver or JSON.stringify's replacer and space arguments? 
+1. Allow equivalents to JSON.parse's reviver or JSON.stringify's replacer and space arguments?
 
 # Possible future spec additions
 
