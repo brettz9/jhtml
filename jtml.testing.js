@@ -9,7 +9,7 @@ function validate (txt) {'use strict';
         if (xml.documentElement.nodeName === 'parsererror') {
             throw xml.documentElement.textContent;
         }
-        if (new DOMParser().parseFromString(txt, 'text/html').body.firstChild.nodeType  !== 1) {
+        if (new DOMParser().parseFromString(txt, 'text/html').body.firstChild.nodeType !== 1) {
             throw 'An element is expected at root';
         }
     }

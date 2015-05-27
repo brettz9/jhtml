@@ -30,6 +30,7 @@ write('undefined' === JHTML.toJSONString([elementFromString('<i itemscope="" ite
 write('Infinity' === JHTML.toJSONString([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">Infinity</i>')], {mode: 'JavaScript'}));
 write('function anonymous() {\n\n}' === JHTML.toJSONString([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">function () {}</i>')], {mode: 'JavaScript'}));
 
+validateAndWrite(JHTML.toJHTMLDOM(null).outerHTML);
 
 validateAndWrite(JHTML.toJHTMLString(null));
 validateAndWrite(JHTML.toJHTMLString(true));

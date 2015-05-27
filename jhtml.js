@@ -286,7 +286,7 @@ endHandler: function (obj, parObj, parKey, parObjArrBool) {
     };
     exp.toJHTMLDOM = function (jsonObj) {
         var jhtmlStr = this.toJHTMLString(jsonObj);
-        return new DOMParser().parseFromString(jhtmlStr, 'text/html');
+        return new DOMParser().parseFromString(jhtmlStr, 'text/html').body.firstElementChild;
     };
 
 }());
