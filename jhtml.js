@@ -14,6 +14,7 @@
 * @requires polyfill: HTMLDocument.prototype.getItems
 * @todo Add polyfills, e.g., https://github.com/termi/Microdata-JS/
 * @todo Add option for stringification (JSON or JHTML) to provide indentation, etc.
+* @todo Make SAJJ as separate repo and require
 */
 var exports;
 (function () {'use strict';
@@ -28,7 +29,7 @@ var exports;
         // Todo: also ignore nodes like comments or processing instructions? (A mistake of JSON?); we might even convert comments into JavaScript comments if this is used in a non-JSON-restricted JavaScript environment
         return node.nodeType !== 1; // Not an element (ignore comments, whitespace text nodes, etc.)
     }
-    function item2JSONObject (item, throwOnSpan) {
+    function item2JSONObject (item, allowJS, throwOnSpan) {
         var ret, state, textContent = item.textContent, topLevelJSONElement = item.nodeName.toLowerCase();
         switch (topLevelJSONElement) {
             case 'span':
@@ -44,16 +45,15 @@ var exports;
                         return true;
                     case 'false':
                         return false;
-// Todo: check option on whether allowing non-JSON (ensure always allowing number below)
                     // Non-JSON
                     case 'undefined':
-                        return undefined;
+                        ret = undefined;
                     case 'Infinity':
-                        return Infinity;
+                        ret = Infinity;
                     case '-Infinity':
-                        return -Infinity;
+                        ret = -Infinity;
                     case 'NaN':
-                        return NaN;
+                        ret = NaN;
                     default:
                         // number
                         if ((/^\-?(?:0|[1-9]\d*)(?:\.\d+)?(?:e(?:\+|\-)?\d+)?$/i).test(textContent)) {
@@ -62,21 +62,24 @@ var exports;
                         // function
                         var funcMatch = textContent.match(/^function \w*([\w, ]*) \{([\s\S]*)\}$/);
                         if (funcMatch) {
-                            return Function.apply(null, funcMatch[1].split(/, /).concat(funcMatch[2]));
+                            ret = Function.apply(null, funcMatch[1].split(/, /).concat(funcMatch[2]));
                         }
                         // Date
                         if ((/^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) /).test(textContent)) {
-                            return new Date(Date.parse(textContent));
+                            ret = new Date(Date.parse(textContent));
                         }
                         // RegExp
                         var regexMatch = textContent.match(/^\/([\s\S]*)\/(g?)(i?)(m?)$/);
                         if (regexMatch) {
                             var flags = (regexMatch[2] ? 'g' : '') + (regexMatch[3] ? 'i' : '') + (regexMatch[4] ? 'm' : '');
-                            return new RegExp(regexMatch[1], flags);
+                            ret = new RegExp(regexMatch[1], flags);
                         }
                         break;
                 }
-                return;
+                if (!allowJS) {
+                    throw 'The value type (' + ret + ') cannot be used in JSON mode';
+                }
+                return ret;
             case 'dl': // object
                 // JSON allows empty objects (and HTML allows empty <dl>'s) so we do also
                 state = 'dt';
@@ -107,7 +110,7 @@ var exports;
                         ret[key] = node.textContent;
                         return;
                     }
-                    ret[key] = item2JSONObject(node.children[0], true);
+                    ret[key] = item2JSONObject(node.children[0], allowJS, true);
                     return;
                 });
                 if (state !== 'dt') {
@@ -133,7 +136,7 @@ var exports;
                     if (!node.children.length) { // String
                         ret.push(node.textContent);
                     }
-                    ret.push(item2JSONObject(node.children[0], true));
+                    ret.push(item2JSONObject(node.children[0], allowJS, true));
                 });
                 return ret;
         }
@@ -246,16 +249,17 @@ endHandler: function (obj, parObj, parKey, parObjArrBool) {
         exp = exports;
     }
 
-    exp.toJSONObject = function (items, allowJS) {
-        return JSON.parse(this.toJSONString(items));
-    };
+    exp.toJSONObject = item2JSONObject;
     /**
     * We don't validate that other attributes are not present, but they should not be
     */
     exp.toJSONString = function (items, allowJS) {
         var jsonHtml = items || document.getItems(jhtmlNs),
-            ret = [].map.call(jsonHtml, item2JSONString);
-        return ret.length === 1 ? ret[0] : '[' + ret.join(',') + ']';
+            ret = [].map.call(jsonHtml, function (item) {
+                var jsonObj = item2JSONObject(item, allowJS);
+                
+            });
+        return ret.length === 1 ? ret[0] : ret;
     };
     exp.toJHTMLString = function (jsonObj, options) {
         options = options || {};
