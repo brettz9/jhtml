@@ -48,33 +48,40 @@ var exports;
                     // Non-JSON
                     case 'undefined':
                         ret = undefined;
+                        break;
                     case 'Infinity':
                         ret = Infinity;
+                        break;
                     case '-Infinity':
                         ret = -Infinity;
+                        break;
                     case 'NaN':
                         ret = NaN;
+                        break;
                     default:
                         // number
                         if ((/^\-?(?:0|[1-9]\d*)(?:\.\d+)?(?:e(?:\+|\-)?\d+)?$/i).test(textContent)) {
                             return parseFloat(textContent);
                         }
                         // function
-                        var funcMatch = textContent.match(/^function \w*([\w, ]*) \{([\s\S]*)\}$/);
+                        var funcMatch = textContent.match(/^function \w*\(([\w, ]*)\) \{([\s\S]*)\}$/);
                         if (funcMatch) {
                             ret = Function.apply(null, funcMatch[1].split(/, /).concat(funcMatch[2]));
+                            break;
                         }
                         // Date
                         if ((/^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) /).test(textContent)) {
                             ret = new Date(Date.parse(textContent));
+                            break;
                         }
                         // RegExp
                         var regexMatch = textContent.match(/^\/([\s\S]*)\/(g?)(i?)(m?)$/);
                         if (regexMatch) {
                             var flags = (regexMatch[2] ? 'g' : '') + (regexMatch[3] ? 'i' : '') + (regexMatch[4] ? 'm' : '');
                             ret = new RegExp(regexMatch[1], flags);
+                            break;
                         }
-                        break;
+                        throw 'Unrecognized type';
                 }
                 if (!allowJS) {
                     throw 'The value type (' + ret + ') cannot be used in JSON mode';
@@ -249,16 +256,26 @@ endHandler: function (obj, parObj, parKey, parObjArrBool) {
         exp = exports;
     }
 
-    exp.toJSONObject = item2JSONObject;
+    exp.toJSONObject = function (items, options) {
+        options = options || {};
+        var jsonHtml = items || document.getItems(jhtmlNs);
+        var ret = [].map.call(jsonHtml, function (item) {
+            return item2JSONObject(item, options.mode === 'JavaScript');
+        });
+        return ret.length === 1 ? ret[0] : ret;
+    };
     /**
     * We don't validate that other attributes are not present, but they should not be
+    * @todo Could make more efficient option
     */
-    exp.toJSONString = function (items, allowJS) {
-        var jsonHtml = items || document.getItems(jhtmlNs),
-            ret = [].map.call(jsonHtml, function (item) {
-                var jsonObj = item2JSONObject(item, allowJS);
-                
-            });
+    exp.toJSONString = function (items, options) {
+        options = options || {};
+        var jsonHtml = items || document.getItems(jhtmlNs);
+        var ret = [].map.call(jsonHtml, function (item) {
+            var jsonObj = item2JSONObject(item, options.mode === 'JavaScript');
+            var stringifier = new Stringifier(options);
+            return stringifier.walkJSONObject(jsonObj);
+        });
         return ret.length === 1 ? ret[0] : ret;
     };
     exp.toJHTMLString = function (jsonObj, options) {
