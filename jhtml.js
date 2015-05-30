@@ -129,6 +129,7 @@ var exports;
                 if (item.getAttribute('start') !== '0') {
                     throw 'For the sake of readability, <ol> must include a start="0" attribute within JHTML.';
                 }
+                ret = [];
                 // JSON allows empty arrays (and HTML allows empty <ol>'s) so we do also
                 [].forEach.call(item.childNodes, function (node) {
                     if (ignoreHarmlessNonelementNodes(node, item)) {
@@ -144,7 +145,9 @@ var exports;
                     if (!node.children.length) { // String
                         ret.push(node.textContent);
                     }
-                    ret.push(item2JSONObject(node.children[0], allowJS, true));
+                    else {
+                        ret.push(item2JSONObject(node.children[0], allowJS, true));
+                    }
                 });
                 return ret;
         }
@@ -259,7 +262,7 @@ endHandler: function (obj, parObj, parKey, parObjArrBool) {
 
     exp.toJSONObject = function (items, options) {
         options = options || {};
-        var jsonHtml = items || document.getItems(jhtmlNs);
+        var jsonHtml = (items && items.nodeType === 1) ? [items] : (items || document.getItems(jhtmlNs));
         var ret = [].map.call(jsonHtml, function (item) {
             return item2JSONObject(item, options.mode === 'JavaScript');
         });
@@ -271,7 +274,7 @@ endHandler: function (obj, parObj, parKey, parObjArrBool) {
     */
     exp.toJSONString = function (items, options) {
         options = options || {};
-        var jsonHtml = items || document.getItems(jhtmlNs);
+        var jsonHtml = (items && items.nodeType === 1) ? [items] : (items || document.getItems(jhtmlNs));
         var ret = [].map.call(jsonHtml, function (item) {
             var jsonObj = item2JSONObject(item, options.mode === 'JavaScript');
             var stringifier = new Stringifier(options);
