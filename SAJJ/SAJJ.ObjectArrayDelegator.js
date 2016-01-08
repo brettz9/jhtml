@@ -1,5 +1,9 @@
-/*globals SAJJ */
+var SAJJ;
 (function () {'use strict';
+
+if (exports !== undefined) {
+    SAJJ = require('./SAJJ');
+}
 
 /**
 * @abstract

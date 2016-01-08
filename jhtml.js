@@ -1,4 +1,4 @@
-/*globals SAJJ, ObjectArrayDelegator, DOMParser, exports */
+/*globals DOMParser, exports */
 /*jslint todo: true, vars:true */
 /**
 * JHTML is a format which can represent arbitrary JSON structures in a faithful, human-readable, and portable manner.
@@ -17,7 +17,12 @@
 * @todo Add option for stringification (JSON or JHTML) to provide indentation, etc.
 * @todo Make SAJJ as separate repo and require
 */
-var exports;
+var exports, SAJJ, ObjectArrayDelegator, Stringifier;
+if (exports !== undefined) {
+    SAJJ = require('./SAJJ/SAJJ');
+    ObjectArrayDelegator = require('./SAJJ/SAJJ.ObjectArrayDelegator');
+    Stringifier = require('./SAJJ/SAJJ.Stringifier');
+}
 (function () {'use strict';
     function ignoreHarmlessNonelementNodes (node, item) {
         if (
@@ -157,7 +162,7 @@ var exports;
     }
     var exp,
         jhtmlNs = 'http://brett-zamir.me/ns/microdata/json-as-html/2',
-        JHTMLStringifier = SAJJ.createAndReturn({inherits: ObjectArrayDelegator, methods: 
+        JHTMLStringifier = SAJJ.createAndReturn({inherits: ObjectArrayDelegator, methods:
 {
 
 // JSON terminal handler methods

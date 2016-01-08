@@ -1,10 +1,16 @@
-/*globals SAJJ, ObjectArrayDelegator */
 /**
 * Provides JSON.stringifier()-like functionality (no replacer or space arguments currently, however).
 * This class uses the abstract ObjectArrayDelegator for object/array delegating so the stringification can occur solely on the terminal methods here
 * @todo Could implement our own stringifier for strings rather than using JSON.stringify
 */
+var SAJJ, ObjectArrayDelegator;
+
 (function () {'use strict';
+
+if (exports !== undefined) {
+    SAJJ = require('./SAJJ');
+    ObjectArrayDelegator = require('./SAJJ.ObjectArrayDelegator');
+}
 
 SAJJ.createAndExport({name: 'Stringifier', inherits: ObjectArrayDelegator, methods: {
 

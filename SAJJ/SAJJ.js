@@ -355,5 +355,8 @@ exp.SAJJ_JS = SAJJ_JS;
 if (typeof define !== 'undefined' && define.amd) {
     define(exp);
 }
+else if (typeof module !== 'undefined') {
+    module.exports = SAJJ;
+}
 
 }());

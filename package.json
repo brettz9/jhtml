@@ -4,8 +4,14 @@
     "author": {
         "name": "Brett Zamir",
         "email": "brettz9@yahoo.com",
-        "url": "brett-zamir.me"
+        "url": "http://brett-zamir.me"
     },
+    "contributors": [],
+    "dependencies": {},
+    "engines": {
+        "node": "4.x"
+    },
+    "homepage": "https://github.com/brettz9/jhtml",
     "description": "The JHTML format is a strict subset of HTML used to encode arbitrary JSON within HTML. This library seeks to provide conversions while simultaneously validating the indicated JHTML structure(s).",
     "main": "./jhtml",
     "repository": {
