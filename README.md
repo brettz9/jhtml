@@ -129,6 +129,8 @@ npm install
 nodeunit test
 ```
 
+For browser testing, open [test/test.html](test/test.html).
+
 # Inspiration
 
 JHTML was inspired by Netscape bookmark files as used when exporting bookmarks in Firefox. They brought to my attention that `<dl>` could be used to represent nestable key-value data hierarchies as also found in JSON objects.
