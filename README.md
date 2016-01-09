@@ -32,7 +32,17 @@ Currently, comment (and processing instructions) and whitespace text nodes are a
 1. I did not require (or even allow) `itemprop` usage in this version, as it is unnecessarily cumbersome, and would also not be visible within WYSIWYG editors (and thus more prone to error).
 1. It should potentially be able to accommodate other JavaScript objects (e.g., `undefined`, function (via `toString()`, non-finite numbers, date objects, and regular expression objects ought to appear within &lt;i&gt; without ambiguity).
 
-# Usage
+# Node usage
+
+```shell
+npm install jhtml
+```
+
+```js
+var JHTML = require('jhtml');
+```
+
+# Brower usage
 
 ```html
 <script src="jhtml.js"></script>
@@ -60,12 +70,12 @@ who have disabled CSS.
 
 If you intend to support older browsers, you will need polyfills for:
 
-1. Array.prototype.map
-1. Array.prototype.reduce
-1. Element.prototype.textContent
-1. Element.prototype.itemProp
-1. HTMLDocument.prototype.getItems
-1. Element.firstElementChild
+1. `Array.prototype.map`
+1. `Array.prototype.reduce`
+1. `Element.prototype.textContent`
+1. `Element.prototype.itemProp`
+1. `HTMLDocument.prototype.getItems`
+1. `Element.firstElementChild`
 
 # Possible future todos
 
@@ -102,6 +112,22 @@ The following are other possible changes:
 1. Change the itemtype namespace if standardized
 1. Allow multiple `<dd>`'s if taken to mean array children? (Probably more confusing even if more succinct than requiring a child `<ol>`).
 1. Anything else that comes up out of consultation with others (although I intend to change the namespace upon any breaking changes).
+
+# Development
+
+```shell
+npm install
+
+npm test
+```
+
+or, with `nodeunit` installed globally:
+
+```shell
+npm install
+
+nodeunit test
+```
 
 # Inspiration
 

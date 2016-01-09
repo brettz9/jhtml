@@ -1,6 +1,6 @@
 {
     "name": "jhtml",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "author": {
         "name": "Brett Zamir",
         "email": "brettz9@yahoo.com",
@@ -8,6 +8,12 @@
     },
     "contributors": [],
     "dependencies": {},
+    "devDependencies": {
+        "nodeunit": "0.9.x"
+    },
+    "scripts": {
+        "test": "node ./node_modules/nodeunit/bin/nodeunit test"
+    },
     "engines": {
         "node": "4.x"
     },

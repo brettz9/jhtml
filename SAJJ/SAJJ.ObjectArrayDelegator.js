@@ -1,4 +1,4 @@
-var SAJJ;
+var SAJJ, module;
 (function () {'use strict';
 
 if (exports !== undefined) {
@@ -113,6 +113,7 @@ ObjectArrayDelegator.prototype.arrayValueHandler = function (value, key, parentO
     return this.delegateHandlersByType(value, parentObject, parentKey, parentObjectArrayBool);
 };
 
-SAJJ.exportClass(ObjectArrayDelegator, 'ObjectArrayDelegator');
+SAJJ.exportClass(ObjectArrayDelegator, 'ObjectArrayDelegator', module);
+
 
 }());

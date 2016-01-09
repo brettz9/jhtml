@@ -308,7 +308,7 @@ SAJJ.createAndReturn = function createAndReturn (options) {
 
 SAJJ.createAndExport = function createAndExport (options) {
     var Constructor = SAJJ.createAndReturn(options);
-    SAJJ.exportClass(Constructor, options.name);
+    SAJJ.exportClass(Constructor, options.name, options.exportObject);
     return Constructor;
 };
 
@@ -323,7 +323,7 @@ SAJJ.createConstructor = function createConstructor (Inheritor) {
     Constructor.prototype = new Inheritor();
     return Constructor;
 };
-SAJJ.exportClass = function exportClass (clss, name) {
+SAJJ.exportClass = function exportClass (clss, name, exp) {
     name = name || clss.name;
     if (typeof define !== 'undefined' && define.amd) { // AMD might not allow us to do this dynamically
         define(name, function () {
@@ -331,8 +331,12 @@ SAJJ.exportClass = function exportClass (clss, name) {
         });
     }
     else {
-        var mod = typeof module !== 'undefined' ? module.exports : window;
-        mod[name] = clss;
+        if (typeof exp !== 'undefined') {
+            exp.exports = clss;
+        }
+        else {
+            window[name] = clss;
+        }
     }
 };
 
@@ -348,15 +352,18 @@ function SAJJ_JS (options) {
 }
 
 // EXPORTS
-var exp = (typeof define !== 'undefined' && define.amd ? {} : typeof exports !== 'undefined' ? exports : window);
-exp.SAJJ = SAJJ;
-exp.SAJJ_JS = SAJJ_JS;
-
-if (typeof define !== 'undefined' && define.amd) {
-    define(exp);
-}
-else if (typeof module !== 'undefined') {
+if (typeof module !== 'undefined') {
+    SAJJ.SAJJ_JS = SAJJ_JS;
     module.exports = SAJJ;
+}
+else {
+    var exp = typeof define !== 'undefined' && define.amd ? {} : window;
+    exp.SAJJ = SAJJ;
+    exp.SAJJ_JS = SAJJ_JS;
+
+    if (typeof define !== 'undefined' && define.amd) {
+        define(exp);
+    }
 }
 
 }());

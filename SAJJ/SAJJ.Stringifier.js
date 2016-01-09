@@ -3,7 +3,7 @@
 * This class uses the abstract ObjectArrayDelegator for object/array delegating so the stringification can occur solely on the terminal methods here
 * @todo Could implement our own stringifier for strings rather than using JSON.stringify
 */
-var SAJJ, ObjectArrayDelegator;
+var SAJJ, module, ObjectArrayDelegator;
 
 (function () {'use strict';
 
@@ -12,7 +12,7 @@ if (exports !== undefined) {
     ObjectArrayDelegator = require('./SAJJ.ObjectArrayDelegator');
 }
 
-SAJJ.createAndExport({name: 'Stringifier', inherits: ObjectArrayDelegator, methods: {
+SAJJ.createAndExport({name: 'Stringifier', exportObject: module, inherits: ObjectArrayDelegator, methods: {
 
     // JSON terminal handler methods
 
@@ -75,5 +75,6 @@ SAJJ.createAndExport({name: 'Stringifier', inherits: ObjectArrayDelegator, metho
         return String(value);
     }
 }});
+
 
 }());
