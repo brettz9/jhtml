@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Example Test Suite</title>
+    <link rel="stylesheet" href="../node_modules/nodeunit/share/nodeunit.css" type="text/css" />
+    <script src="../SAJJ/SAJJ.js"></script>
+    <script src="../SAJJ/SAJJ.ObjectArrayDelegator.js"></script>
+    <script src="../SAJJ/SAJJ.Stringifier.js"></script>
+    <script src="../jhtml.js"></script>
+    <script src="../node_modules/nodeunit/examples/browser/nodeunit.js"></script>
+    <script src="jhtmlTests.js"></script>
+  </head>
+  <body>
+    <h1 id="nodeunit-header">Example Test Suite</h1>
+    <script>
+      nodeunit.run({
+        'Suite One': jhtmlTests
+      });
+    </script>
+  </body>
+</html>

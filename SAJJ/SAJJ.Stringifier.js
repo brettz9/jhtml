@@ -3,7 +3,7 @@
 * This class uses the abstract ObjectArrayDelegator for object/array delegating so the stringification can occur solely on the terminal methods here
 * @todo Could implement our own stringifier for strings rather than using JSON.stringify
 */
-var SAJJ, module, ObjectArrayDelegator;
+var SAJJ, exports, module, ObjectArrayDelegator;
 
 (function () {'use strict';
 

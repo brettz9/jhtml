@@ -1,4 +1,4 @@
-var SAJJ, module;
+var SAJJ, exports, module;
 (function () {'use strict';
 
 if (exports !== undefined) {
