@@ -13,6 +13,6 @@ var jhtmlTests = {
 };
 
 if (typeof exports !== 'undefined') {
-    JHTML = require('../jhtml')
+    JHTML = require('../jhtml');
     module.exports = jhtmlTests;
 }
