@@ -1,4 +1,4 @@
-*[itemtype="http://brett-zamir.me/ns/microdata/json-as-html/1"] {
+*[itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2"] {
     background-color:beige;
 }
 
@@ -6,15 +6,21 @@
 To be more careful (esp. for those rules not using
 itemprop or with itemprop not present), we could
 namespace all of these under:
-    *[itemtype="http://brett-zamir.me/ns/microdata/json-as-html/1"]
+    *[itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2"]
 */
 
 dt {font-style:italic; color: green;}
-*[itemprop="number"] {color:darkorange;}
-*[itemprop="boolean"] {color:blue;}
-*[itemprop="null"] {color:gray;}
-dd:not([itemprop]) {color:red;}
-dd:not([itemprop]) > ol {color:purple;}
+
+/*
+Currently not using "itemprop" or any other attribute, so no way to
+distiguish these from each other given CSS' lack of :contains() selector:
+i[itemprop="number"] {color:darkorange;}
+i[itemprop="boolean"] {color:blue;}
+i[itemprop="null"] {color:gray;}
+*/
+
+dd {color:red;}
+dd > ol {color:purple;}
 
 
 /*
