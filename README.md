@@ -28,7 +28,7 @@ Currently, comment (and processing instructions) and whitespace text nodes are a
 
 # Design considerations
 
-1. Be as simple as possible while distinguishing types and be round-trippable (when using the valid subset of HTML).
+1. Be as simple as possible while distinguishing types and be round-trippable (when using the valid subset of HTML) without picking up false positives (HTML markup which was not intended to represent JSON).
 1. Adding `null`, boolean, and numbers (if not object keys) be within `<i>` visually distinguishes them from strings of the same value. Although this adds some verbosity, and it would technically be possible with CSS to overcome this need, without it, bare HTML would not allow distinguishment between primitive types.
 1. It should potentially be able to accommodate other JavaScript objects (e.g., `undefined`, function (via `toString()`, non-finite numbers, date objects, and regular expression objects ought to appear within &lt;i&gt; without ambiguity).
 1. Avoid invisible mark-up which, if say used in a WYSIWYG editor would not be readily discovered and thus could suffer from undetected maintenance problems).
