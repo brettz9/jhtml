@@ -26,11 +26,12 @@ Currently, comment (and processing instructions) and whitespace text nodes are a
 1. JSON objects (in whatever context) will be encoded as `<dl>` whose individual child items (if any) will be represented by alternating `<dt>`/`<dd>` pairs (only single instances are allowed for each within a pair). `<dt>` will represent the keys of the object, whereas `<dd>` will represent the values. Pure text content within `<dd>` will indicate a string, whereas a single `<i>` child of `<dd>` will indicate `null` or a boolean or number type (as per the second rule). A single `<dl>` or `<ol>` child will indicate a child object or array respectively (see the previous rule for array rules).
 1. The top-level element SHOULD include an XHTML namespace declaration (` xmlns="http://www.w3.org/1999/xhtml"`) for polyglot compatibility and MUST contain the attributes, `itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2"`.
 
-# Design choices
+# Design considerations
 
+1. Be as simple as possible while distinguishing types and be round-trippable (when using the valid subset of HTML).
 1. Adding `null`, boolean, and numbers (if not object keys) be within `<i>` visually distinguishes them from strings of the same value. Although this adds some verbosity, and it would technically be possible with CSS to overcome this need, without it, bare HTML would not allow distinguishment between primitive types.
-1. I did not require (or even allow) `itemprop` usage in this version, as it is unnecessarily cumbersome, and would also not be visible within WYSIWYG editors (and thus more prone to error).
 1. It should potentially be able to accommodate other JavaScript objects (e.g., `undefined`, function (via `toString()`, non-finite numbers, date objects, and regular expression objects ought to appear within &lt;i&gt; without ambiguity).
+1. Avoid invisible mark-up which, if say used in a WYSIWYG editor would not be readily discovered and thus could suffer from undetected maintenance problems).
 
 # Node usage
 
