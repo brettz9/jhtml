@@ -111,6 +111,7 @@ The following are possible tightening or other breaking changes:
 1. Move the `itemtype` properties to a container element such as `<a>` to avoid the need for an inconsistency with string requiring `<span>` at the top level.
 1. For `null`, booleans, and numbers, change `<i>` to `<code>` (or optionally to `<code class="language-javascript">` as specifically allowed by the [spec](https://html.spec.whatwg.org/multipage/semantics.html#the-code-element:classes)) for
 greater semantic accuracy (but at a cost of simplicity and slightly different presentation).
+1. Allow styling hooks to allow distinguishing between `null`, booleans, and numbers (or `undefined`, non-finite numbers, and functions)
 
 The following are other possible changes:
 
