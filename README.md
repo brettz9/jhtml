@@ -33,6 +33,7 @@ Currently, comment (and processing instructions) and whitespace text nodes are a
 1. It should potentially be able to accommodate other JavaScript objects (e.g., `undefined`, function (via `toString()`, non-finite numbers, date objects, and regular expression objects ought to appear within &lt;i&gt; without ambiguity).
 1. Minimize use of invisible mark-up which, if say used in a WYSIWYG editor would not be readily discovered and thus could suffer from undetected maintenance problems).
 1. Visually distinguish depth of nesting.
+1. Use mark-up which is as semantically clear as possible (e.g., ordered list well represents the concept of arrays, etc.)
 
 # Node usage
 
