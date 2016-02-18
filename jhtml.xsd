@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.w3.org/1999/xhtml"
+  targetNamespace="http://www.w3.org/1999/xhtml"
+  elementFormDefault="qualified">
+
+<xs:attributeGroup name="rootAtts">
+   <xs:attribute name="itemscope" type="xs:string" use="required" fixed=""/>
+    <xs:attribute name="itemtype" type="xs:string" use="required" fixed="http://brett-zamir.me/ns/microdata/json-as-html/2"/>
+</xs:attributeGroup>
+
+<xs:simpleType name="null">
+    <xs:restriction base="xs:string">
+        <xs:pattern value="null" />
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="true-or-false">
+    <xs:restriction base="xs:boolean">
+        <xs:pattern value="true" />
+        <xs:pattern value="false" />
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="decimal">
+    <xs:restriction base="xs:decimal"/>
+</xs:simpleType>
+
+<xs:simpleType name="iType">
+    <xs:union memberTypes="null true-or-false decimal" />
+</xs:simpleType>
+
+<xs:group name="children">
+    <xs:choice>
+        <xs:element name="i" type="iType"/>
+        <xs:element name="dl">
+            <xs:complexType>
+                <xs:sequence maxOccurs="unbounded">
+                    <xs:element name="dt" type="xs:string"/>
+                    <xs:element name="dd">
+                            <xs:complexType mixed="true">
+                                <xs:group ref="children" minOccurs="0"/>
+                            </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+        <xs:element name="ol">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="li" maxOccurs="unbounded">
+                            <xs:complexType mixed="true">
+                                <xs:group ref="children" minOccurs="0"/>
+                            </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="start" type="xs:integer" use="required" fixed="0"/>
+            </xs:complexType>
+        </xs:element>
+    </xs:choice>
+</xs:group>
+
+<xs:element name="span">
+    <xs:complexType>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attributeGroup ref="rootAtts"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="i">
+    <xs:complexType>
+        <xs:simpleContent>
+            <xs:extension base="iType">
+                <xs:attributeGroup ref="rootAtts"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="dl">
+    <xs:complexType>
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="dt" type="xs:string"/>
+            <xs:element name="dd">
+                <xs:complexType mixed="true">
+                    <xs:group ref="children" minOccurs="0"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="rootAtts"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="ol">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element name="li" maxOccurs="unbounded">
+                <xs:complexType mixed="true">
+                    <xs:group ref="children" minOccurs="0"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="rootAtts"/>
+        <xs:attribute name="start" type="xs:integer" use="required" fixed="0"/>
+    </xs:complexType>
+</xs:element>
+
+</xs:schema>
