@@ -15,13 +15,13 @@ function JQFlower (opts) {
         this.$declaration(opts);
     }
 }
-// Allows invoking on an explicit function separately though it is unnecessary 
+// Allows invoking on an explicit function separately though it is unnecessary
 //  as this function is also auto-invoked by the constructor
 JQFlower.prototype.$declaration = function (opts) {
-    for (var opt in opts) {
-        
-    }
-	return this;
+    /* for (var opt in opts) {
+
+    } */
+    return this;
 };
 JQFlower.prototype.$ = JQFlower.prototype.$wrapper = function () {
     return this;

@@ -1,4 +1,4 @@
-/* 
+/*
 Design goals:
 1) able to instantiate for use as template group
 2) Easy to read and create by hand
@@ -16,7 +16,7 @@ What if your designers weren't so clueless on JavaScript because they had to use
 
 Discuss relative merits of "declarative" as far as XSL vs. JS. Usually think of limited vocabulary, secure, not requiring tracking implementation details (e.g., for (var i; i < len; i++))
 
-Related work: 
+Related work:
 1) XSL
 2) XUL (Recursive) Templates: https://developer.mozilla.org/en-US/docs/XUL/Template_Guide/Using_Recursive_Templates
 3) XBL
@@ -32,12 +32,12 @@ XBL as XJSON (implement specific XUL)
 /*
 Syntax approaches (in order of desirability):
 
-1) Support following syntax: ' /  mode=Hello priority=5 name=Root'; 
+1) Support following syntax: ' /  mode=Hello priority=5 name=Root';
     clear, compatible with prototype though not perfectly structured
 2) Clear and structured but not compatibility with prototype
 '/' : {
-    mode: 'something', 
-    priority: 7, 
+    mode: 'something',
+    priority: 7,
     template: function () {
     }
 }
@@ -75,15 +75,15 @@ function ProcessTemplates (ts) {
             }
         }
         unsortedMatches.push(matchPattern);
-        
-        
+
+
         var treeWalker = document.createTreeWalker(
             document.body,
             NodeFilter.SHOW_ELEMENT,
             {
                 acceptNode: function (node) {
                     // Check node matches here to route to templates
-                    
+
                     return NodeFilter.FILTER_ACCEPT;
                 }
             },
@@ -94,19 +94,19 @@ function ProcessTemplates (ts) {
         }
     }
     ts.$apply = function () {
-        
+
     };
     ts.$call = function () { // Call templates by name (although one could directly call templates, this allows naming of templates along with other parameters)
-        
+
     };
 }
 
 var jsonHTMLTemplates = {
-    '/' : function ($ctx, $this) { // Pass in 'that'-like obj reference as 2nd argument for convenience 
+    '/' ($ctx, $this) { // Pass in 'that'-like obj reference as 2nd argument for convenience
                                //    in working within functions
         return ['html', [
-                    ['head'], 
-                    ['body', 
+                    ['head'],
+                    ['body',
                         [
                             $this.$call('$customTemplate', 'http://example.com', 'Sample link'),
                             $this.$forEach('.someClass', function (node) {
@@ -117,19 +117,19 @@ var jsonHTMLTemplates = {
                     ]
                ]];
     },
-    ' p mode=Hello priority=5 name=Special_pars' : function ($ctx) {
+    ' p mode=Hello priority=5 name=Special_pars' ($ctx) {
         return '';
     },
-    i : function ($ctx) {
+    i ($ctx) {
         return ['em', $ctx.children()];
     },
-    $customTemplate : function (param1, param2) {
+    $customTemplate (param1, param2) {
         return ['a', {href:param1}, [param2]];
     }
 };
 
 var htmlStringTemplates = {
-    '/' : function ($ctx) {
+    '/' ($ctx) {
         return '<html><body>'+
             this.$customTemplate('http://example.com', 'Sample link') +
             $X.forEach('.someClass', function (node) {
@@ -139,17 +139,17 @@ var htmlStringTemplates = {
             this.$applyTemplates($ctx) + // $ctx arg necessary?
         '</body></html>';
     },
-    p : function ($ctx) {
+    p ($ctx) {
         return '<p class="special">' + string($ctx) + '</p>';
     },
     /*
     div : function ($ctx) // Shortened syntax in JS1.8 for readability
         '<p class="special">' + string($ctx) + '</p>',
     */
-    i : function ($ctx) {
+    i ($ctx) {
         return '<em>' + $ctx.children().html() + '</em>';
     },
-    $customTemplate : function (param1, param2) {
-        return '<a href="' + param1 '">' +  param2 + '</a>';
+    $customTemplate (param1, param2) {
+        return '<a href="' + param1 + '">' +  param2 + '</a>';
     }
 };

@@ -17,8 +17,8 @@
 * @todo Add option for stringification (JSON or JHTML) to provide indentation, etc.
 * @todo Make SAJJ as separate repo and require
 */
-var exports, module, SAJJ, ObjectArrayDelegator, Stringifier;
-if (exports !== undefined) {
+var SAJJ, ObjectArrayDelegator, Stringifier;
+if (typeof exports !== 'undefined') {
     SAJJ = require('./SAJJ/SAJJ');
     ObjectArrayDelegator = require('./SAJJ/SAJJ.ObjectArrayDelegator');
     Stringifier = require('./SAJJ/SAJJ.Stringifier');
@@ -164,7 +164,7 @@ if (exports !== undefined) {
         jhtmlNs = 'http://brett-zamir.me/ns/microdata/json-as-html/2',
         JHTMLStringifier = SAJJ.createAndReturn({
             inherits: ObjectArrayDelegator,
-            exportObject: module,
+            exportObject: typeof module !== 'undefined' ? module : undefined,
             methods: {
 
 // JSON terminal handler methods

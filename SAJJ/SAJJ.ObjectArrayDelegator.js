@@ -1,7 +1,7 @@
-var SAJJ, exports, module;
+var SAJJ;
 (function () {'use strict';
 
-if (exports !== undefined) {
+if (typeof exports !== 'undefined') {
     SAJJ = require('./SAJJ');
 }
 
@@ -65,8 +65,8 @@ ObjectArrayDelegator.prototype.arrayHandler = function arrayHandler (value, pare
 };
 
 /**
-* Can override to avoid delegating to separate array/object handlers; see isArrayType notes 
-*   for a means to treat objectHandler/arrayHandler as the same; overridden optionally in 
+* Can override to avoid delegating to separate array/object handlers; see isArrayType notes
+*   for a means to treat objectHandler/arrayHandler as the same; overridden optionally in
 *   constructor by keyValueDistinguishedHandler
 */
 
@@ -113,7 +113,6 @@ ObjectArrayDelegator.prototype.arrayValueHandler = function (value, key, parentO
     return this.delegateHandlersByType(value, parentObject, parentKey, parentObjectArrayBool);
 };
 
-SAJJ.exportClass(ObjectArrayDelegator, 'ObjectArrayDelegator', module);
-
+SAJJ.exportClass(ObjectArrayDelegator, 'ObjectArrayDelegator', typeof module !== 'undefined' ? module : undefined);
 
 }());

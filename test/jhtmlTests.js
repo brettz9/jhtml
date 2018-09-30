@@ -1,7 +1,7 @@
 var JHTML;
 
 var jhtmlTests = {
-    'basic test': function (test) {
+    'basic test' (test) {
         test.expect(1);
 
         var expected = '<ol start="0" itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">'+

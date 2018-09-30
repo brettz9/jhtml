@@ -264,7 +264,7 @@ if (typeof JSON !== 'object') {
             return isFinite(value) ? String(value) : 'null';
 
         case 'boolean':
-        case 'null':
+        // case 'null':
 
 // If the value is a boolean or null, convert it to a string. Note:
 // typeof null does not produce 'null'. The case is included here in

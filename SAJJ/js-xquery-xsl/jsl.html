@@ -24,39 +24,41 @@ var result = JSL().match({
     }
 });*/
 
-function string (node) {
-    return node.textContent;
+/*
+function string ({textContent}) {
+    return textContent;
 }
+*/
 
 var result = JSL().
     variables({
-        'myVar1' : 'someValue'
+        myVar1: 'someValue'
     }).
     named({
-        'italicize' : function (node) '<i>' + node + '</i>',
-        'bold' : {
-            'b' : function (node) '<b>' + node + '</b>',
-            'span' : function (node) '<span style="font-weight:bold">' + node + '</span>'
+        italicize: (node) => '<i>' + node + '</i>',
+        bold: {
+            b: (node) => '<b>' + node + '</b>',
+            span: (node) => '<span style="font-weight:bold">' + node + '</span>'
         }
     }).
     match({
-        '/' : function () 
-            '<body>' + 
+        '/' () {
+            return '<body>' +
                 this.call('bold', 'span', ['text' + this.vars.myVar1]) +
 /*                this.foreach('a', function ()  // Could make foreach chainable using valueOf, etc. in subsequent chain
                     '<span>' + this.call('italicize', [this.valueOf('.')]) + '</span>'
                 ) + */
-                this.apply('mode2') + 
-            '</body>'
-        ,'a' : function (a) 
-            '<a></a>'
-        ,'div' : {
-            'mode1' : function () 
-                '<div class="_1"/>'
-            ,'mode2' : function () 
-                '<div class="_2"/>' + this.foreach('. span', function ()  // Could make foreach chainable using valueOf, etc. in subsequent chain
-                    '<span>' + this.call('italicize', [this.valueOf('.')]) + '</span>'
-                )
+                this.apply('mode2') +
+            '</body>';
+        },
+        a: (a) => '<a></a>',
+        div: {
+            mode1: () => '<div class="_1"/>',
+            mode2 () {
+                return '<div class="_2"/>' + this.foreach('. span', function () {  // Could make foreach chainable using valueOf, etc. in subsequent chain
+                    return '<span>' + this.call('italicize', [this.valueOf('.')]) + '</span>';
+                });
+            }
         }
     }
 );

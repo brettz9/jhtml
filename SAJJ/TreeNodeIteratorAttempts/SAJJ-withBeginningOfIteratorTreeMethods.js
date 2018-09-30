@@ -1,11 +1,11 @@
 /**
 * SAJJ Simple API for JSON/JavaScript objects
-* This is not intended as a streaming string parser, though walkJSONString() is provided to allow it; 
+* This is not intended as a streaming string parser, though walkJSONString() is provided to allow it;
 *  Clarinet (https://github.com/dscape/clarinet ) is more likely the better choice for such cases.
 *  SAJJ, as with SAX, can be adapted to allow DOM TreeWalker-style parsing (pull or automatic cycling) or XSL-style
-*  iteration (though optional whether to ultimately replace original content), e.g., for use with JsonML style 
+*  iteration (though optional whether to ultimately replace original content), e.g., for use with JsonML style
 *  templates (or JsonML enhanced via full JS with event handlers); besides use cases specific to JS/JSON,
-*  although could use DOM or XML strings to represent JSON and utilizing walkers available to these, 
+*  although could use DOM or XML strings to represent JSON and utilizing walkers available to these,
 *  this would be far more cumbersome than the other way around.
 * @SampleUseCases
 1) Converting JavaScript structures to JSON
@@ -17,7 +17,7 @@
 2) (Send pull request to add your own here!)
 * @DesignChoices
 1) Accurate, easy to use, small, fast, memory-efficient, universal in coverage, clean code
-2) Convenient (e.g., with overridable methods) but not auto-creating likely useful utilities like 
+2) Convenient (e.g., with overridable methods) but not auto-creating likely useful utilities like
     Object.keys(), Object.getOwnPropertyNames(), JSON, etc. as seems less than modular. Might reconsider
     optionally auto-exporting utilities, or adding as handler arguments, in the future, but not planning for now.
 2) Context-aware (handlers to include parent objects as well as values, or JSONPaths)
@@ -25,25 +25,25 @@
 4) Offer optional support of regular JavaScript objects (including those potentially representing XML/HTML with events)
 5) Allow pull or auto-push reporting
 6) Configuration vis-a-vis Clarinet/sax-js options:
-    a) Decided for now against trim/normalize options as in Clarinet as seemed not very useful, though could be 
+    a) Decided for now against trim/normalize options as in Clarinet as seemed not very useful, though could be
         allowed easily in stringHandler
     b) lowercase and xmlns seem too XML-specific
     c) position has analogue in JSONPath goal
-7) Decided against causing conversion to string and feeding into Clarinet as use cases of beginning 
+7) Decided against causing conversion to string and feeding into Clarinet as use cases of beginning
     with JSON rather than merely converting to it were too great (toward JS as main environment or even content-type).
 8) Decided against Clarinet handler names as considered ugly relative to CamelCase (despite JS-event-style-familiarity)
-9) Decided against passing Object.keys (or other exports of Object properties like getOwnPropertyNames) 
-    to beginObjectHandler/beginArrayHandler (and corresponding end methods) as auto-iteration of 
-    keys/values ought to address most use cases for obtaining all keys and user can do it themselves 
+9) Decided against passing Object.keys (or other exports of Object properties like getOwnPropertyNames)
+    to beginObjectHandler/beginArrayHandler (and corresponding end methods) as auto-iteration of
+    keys/values ought to address most use cases for obtaining all keys and user can do it themselves
     if needed. We did pass length of array to begin and endArrayHandler, however.
 10) Have module support standard export formats
 11) Demonstrate functionality by implementing JSON.stringify though provide empty version
-12) Leverage knowledge of existing standard APIs where possible (e.g., DOM NodeIterator/TreeWalker APIs) with 
+12) Leverage knowledge of existing standard APIs where possible (e.g., DOM NodeIterator/TreeWalker APIs) with
     minimum, though adequate, adaptation (e.g., change "Node" references to "JSONValue", but otherwise keep same)
 *
 * @PossibleFutureTodos
 1) Add references to E() in docs along with JsonML references once E() is documented
-2) Once DOM methods may be available to E(), change JSONValueIterator/JSONTreeWalker to update 
+2) Once DOM methods may be available to E(), change JSONValueIterator/JSONTreeWalker to update
     logical view of the JSON structure (i.e., post-filtered), as with DOM traversal,
     when the hierarchy is modified.
 3) Integrate with allowing stream input as in Clarinet?
@@ -51,7 +51,7 @@
 * @Todos
 *
 0) Infinity, NaN, String, Number, Date, etc.
-1) Include pull parser option (modify endHandler, delegateHandlers, arrayHandler, objectHandler?) 
+1) Include pull parser option (modify endHandler, delegateHandlers, arrayHandler, objectHandler?)
     0) TreeWalker whatToShow/Filter simple (Traverser, Filter) vs. all SAJJ methods by pull
     a) Iterator - return null when no more at beginning or end
     b) TreeWalker
@@ -59,7 +59,7 @@
     d) Fix description above about TreeWalker if implement or not
 2) Add depth level @property (which could be used, e.g., by a JSON.stringify implementation)
     a) Implement JSON.stringify (without calling JSON.stringify!); if not, fix SampleImplementations above
-        i) Finish array/object (call delegateHandlersByType inside keyValueHandler or in object/arrayHandler?; 
+        i) Finish array/object (call delegateHandlersByType inside keyValueHandler or in object/arrayHandler?;
             change keyValueHandlers to return commas, etc.)
         ii) avoid functions/undefined/prototype completely, and converting nonfinite to null
 3) Add JSONPaths (or implement JSONPath reporting in SAJJ as in jsonPath())? XPath to TreeWalker/NodeIterator or string SAX XML? .getXPath on DOM node prototype?
@@ -68,11 +68,11 @@
     b) filter() version with return boolean for whatToShow/filter option
     c) some()/every() (cycle through all until find)
     d) map()
-    e) reduce()/reduceRight() (need prev argument for both; previousValue() method for latter); 
+    e) reduce()/reduceRight() (need prev argument for both; previousValue() method for latter);
         i) For JSON.stringify implementation, just do: prev += curr;
 
 5) Verify design goals accurate, met, and comprehensive
-6) Simplify as per http://ejohn.org/blog/unimpressed-by-nodeiterator/ 
+6) Simplify as per http://ejohn.org/blog/unimpressed-by-nodeiterator/
 7) Use DOMNodeRemoved event for NodeIterator implementation?
 
 */
@@ -145,10 +145,10 @@ JSONTreeWalker.prototype.previousValue = function previousValue () {
 
 /**
 * @todo Though parentValue may be relevant, the others below may require a property (including numeric) or properties
-* to determine child; Children and siblings may only be relevant when handling object/array itself, not keys 
-* (which may not have children, and if they did, they would be on a new reportable object anyways); siblings 
-* may seem relevanat to keys, but these are really just values; it may be meaningful, however, to add 
-* "firstValue" and "lastValue" for reference at key value level, as well as add "children" to grab 
+* to determine child; Children and siblings may only be relevant when handling object/array itself, not keys
+* (which may not have children, and if they did, they would be on a new reportable object anyways); siblings
+* may seem relevanat to keys, but these are really just values; it may be meaningful, however, to add
+* "firstValue" and "lastValue" for reference at key value level, as well as add "children" to grab
 * entire array of children
 */
 JSONTreeWalker.prototype.parentValue = function () {
@@ -263,7 +263,7 @@ function SAJJ_JSON (rootJSONObj, options) { // Default is JSON mode so can just 
 * @constructor
 * @param {Object} options See setDefaultOptions() function body for some possibilities
 * @param {null|boolean|number|string|function|nonfiniteNumber|undefined} rootJSONObj The root JSON value to traverse
-* @property {null|boolean|number|string|function|nonfiniteNumber|undefined} root The root JSON value to traverse; 
+* @property {null|boolean|number|string|function|nonfiniteNumber|undefined} root The root JSON value to traverse;
                                                                          part of JSONValueIterator/JSONTreeWalker interfaces
 * @todo Fix docs of options
 * @todo Support object + JSONPath as first argument for iteration within a larger tree
@@ -274,7 +274,7 @@ function SAJJ (rootJSONObj, options) {
     }
 
     this.root = rootJSONObj;
-    this.setDefaultOptions(options);    
+    this.setDefaultOptions(options);
 }
 
 // OPTIONS
@@ -284,13 +284,13 @@ function SAJJ (rootJSONObj, options) {
 */
 SAJJ.prototype.setDefaultOptions = function setDefaultOptions (options) {
     this.options = options || {};
-    
+
     // These two are custom, but used for distinguishing API analogous to DOM createNodeIterator and createTreeWalker
     this.iterator = options.iterator || false; // Set by JSONValueIterator constructor
     this.treeWalker = options.treeWalker || false; // Set by JSONTreeWalker constructor
 
     // Todo: to make properties read-only, etc., use https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/defineProperties
-    
+
     if (this.iterator) {
         this.referenceValue = this.root; // Analogue to step of DOM4 createNodeIterator
         this.pointerBeforeReferenceNode = true; // Analogue to step of DOM4 createNodeIterator
@@ -307,18 +307,18 @@ SAJJ.prototype.setDefaultOptions = function setDefaultOptions (options) {
 
     // Analogue to step of DOM createNodeIterator and createTreeWalker
     this.whatToShow = options.whatToShow || JSONFilter.SHOW_ALL;
-    this.filter = typeof options.filter === 'function' ?  {acceptValue: options.filter} || options.filter || null;
+    this.filter = typeof options.filter === 'function' ?  {acceptValue: options.filter} : (options.filter || null);
     
     // CUSTOM PROPERTIES
     this.mode = options.mode || 'JSON'; // Whether to support full JavaScript objects (with functions, undefined, nonfiniteNumbers) or JSON; will not distinguish object literals from other objects, but neither does JSON.stringify which ignores prototype and drops functions/undefined and converts nonfinite to null
-    
+
     // Default is true as will be pretty limited if not iterating
     this.delayedIteration = options.delayedIteration || true;
     this.distinguishKeysValues = options.distinguishKeysValues || false;
-    
+
     this.iterateArrays = options.iterateArrays || true;
     this.iterateObjects = options.iterateObjects || true;
-    
+
     this.iterateObjectPrototype = options.iterateObjectPrototype || false;
     this.iterateArrayPrototype = options.iterateArrayPrototype || false;
 
@@ -330,7 +330,7 @@ SAJJ.prototype.setDefaultOptions = function setDefaultOptions (options) {
 */
 SAJJ.prototype.alterDefaultHandlers = function alterDefaultHandlers () {
     if (this.delayedIteration) { // If delaying iteration, it will grab the function into the object's memory;
-                                //   otherwise (for immediate iteration), we can take advantage of the 
+                                //   otherwise (for immediate iteration), we can take advantage of the
                                 //   default prototype
         this.delegateHandlers = this.delayedDelegateIterateHandlers;
     }
@@ -338,11 +338,11 @@ SAJJ.prototype.alterDefaultHandlers = function alterDefaultHandlers () {
         this.keyValueHandler = this.keyValueDistinguishedHandler;
     }
 };
-    
+
 // PUBLIC METHODS TO INITIATE PARSING
 
 /**
-* For strings, one may wish to use Clarinet (https://github.com/dscape/clarinet ) to 
+* For strings, one may wish to use Clarinet (https://github.com/dscape/clarinet ) to
 *   avoid extra overhead or parsing twice
 * @param {String} str The JSON string to be walked (after complete conversion to an object)
 * @param {Object|Array} [parentObject] The parent object or array containing the string (not required)
@@ -354,15 +354,15 @@ SAJJ.prototype.walkJSONString = function walkJSONString (str, parentObject, pare
 };
 
 /**
-* 
+*
 * @param {Object} obj The JSON object to walk
 * @param {Object|Array} [parentObject] The parent object or array containing the string (not required)
 * @param {String} [parentKey] The parent object or array's key (not required)
 * @param {Boolean} [parentObjectArrayBool] Whether the parent object is an array (not another object) (not required)
 */
 SAJJ.prototype.walkJSONObject = function walkJSONObject (obj, parentObject, parentKey, parentObjectArrayBool) {
-    var parObj = parentObject || this.options.parentObject, 
-        parKey = parentKey || this.options.parentKey, 
+    var parObj = parentObject || this.options.parentObject,
+        parKey = parentKey || this.options.parentKey,
         parObjArrBool = parentObjectArrayBool || this.options.parentObjectArrayBool || (parObj && this.isArrayType(parObj));
 
     this.delegateHandlersByType(obj, parObj, parKey, parObjArrBool);
@@ -377,7 +377,7 @@ Todo:
             calls nextValue() immediately afterward by default since only one value (though could be used to find
             additional matching of some() or not matching of every())
     c) map() (use parentObject to manipulate in place; otherwise, similar to reduce() with parentObject and clone())
-    d) reduce()/reduceRight() (need prev argument for both; previousValue() method for latter); 
+    d) reduce()/reduceRight() (need prev argument for both; previousValue() method for latter);
         i) For JSON.stringify implementation, just do: prev += curr;  or prev = curr + prev;
 */
 
@@ -392,18 +392,18 @@ SAJJ.prototype.endHandler = function endHandler (obj, parObj, parKey, parObjArrB
 
 // HANDLER DELEGATION BY TYPE
 
-// Todo: override this (or separate out and override secondary method) to delegate 
+// Todo: override this (or separate out and override secondary method) to delegate
 //         objects/arrays separately but for others, pass type as arg, not within method name
 
 SAJJ.prototype.delegateHandlersByType = function delegateHandlersByType (obj, parentObject, parentKey, parentObjectArrayBool) {
-    var runIfSilent = true, 
+    var runIfSilent = true,
         type = this.detectBasicType(obj, parentObject, parentKey, parentObjectArrayBool);
-    
+
     var dontReject = true, dontSkip = this.acceptType(type);
-    
+
     // Todo: Change to continue (silent) iteration for arrays/objects
     // Todo: handle iterator/treeWalker boolean options (also allowing neither to work well)
-    //       shared methods: 
+    //       shared methods:
     //         1) nextValue
     //         2) previousValue
     //       JSONValueIterator properties: pointerBeforeReferenceValue (bool), referenceValue
@@ -411,14 +411,14 @@ SAJJ.prototype.delegateHandlersByType = function delegateHandlersByType (obj, pa
     //       JSONTreeWalker properties: this.currentValue;
     //                  methods: parentValue, firstChild, lastChild, previousSibling, nextSibling
     // this._iteratorCollection
-    
-    
+
+
     if (this.filter && dontSkip) {
         var result = this.filter.acceptValue(obj);
         dontSkip = result === JSONFilter.FILTER_ACCEPT;
         dontReject = this.iterator || result !== JSONFilter.FILTER_REJECT;
     }
-    
+
     switch (type) {
         case 'null': case 'undefined':
             if (dontSkip) {
@@ -450,7 +450,7 @@ SAJJ.prototype.acceptType = function acceptType (type) {
 };
 
 /**
-* Allows override to allow for immediate or delayed execution; should handle both null/undefined 
+* Allows override to allow for immediate or delayed execution; should handle both null/undefined
 * types (which require no first value argument since only one is possible) and other types
 */
 SAJJ.prototype.delegateHandlers = function (type, parentObj, parentKey, parentObjectArrayBool, obj) {
@@ -463,9 +463,9 @@ SAJJ.prototype.delegateHandlers = function (type, parentObj, parentKey, parentOb
 };
 
 /**
-* While this can be overridden on the prototype (impacting all objects) or 
-*   object directly (as it can be in the constructor), it should not be 
-*   called directly, but rather via the iterateHandlers boolean option 
+* While this can be overridden on the prototype (impacting all objects) or
+*   object directly (as it can be in the constructor), it should not be
+*   called directly, but rather via the iterateHandlers boolean option
 *   passed during instantiation.
 */
 SAJJ.prototype.delayedDelegateIterateHandlers = function delayedDelegateIterateHandlers (type, parentObj, parentKey, parentObjectArrayBool, obj) {
@@ -504,18 +504,18 @@ SAJJ.prototype.detectBasicType = function detectBasicType (obj, parentObject, pa
         case 'boolean': case 'string':
             return type;
         case 'object':
-            return obj ? 
-                (this.isArrayType(obj) ? 
-                    'array' : 
+            return obj ?
+                (this.isArrayType(obj) ?
+                    'array' :
                     (JSMode ? this.detectObjectType(obj) : 'object')
-                ) : 
+                ) :
                 'null';
     }
 };
 
 /**
 * Could override to always return false if one wished to merge arrayHandler/objectHandler or, if in
-*  JSMode, to merge detectObjectType and this detectArrayType method. To merge arrayKeyValueHandler and 
+*  JSMode, to merge detectObjectType and this detectArrayType method. To merge arrayKeyValueHandler and
 *  objectKeyValueHandler, see keyValueHandler.
 */
 SAJJ.prototype.isArrayType = function isArrayType (obj) {
@@ -556,7 +556,7 @@ SAJJ.prototype.typeErrorHandler = function errorHandler (type, obj, parentObject
 // HANDLERS
 
 /**
-* Could override for logging; meant for allowing dropping of properties/methods, e.g., undefined/functions, as 
+* Could override for logging; meant for allowing dropping of properties/methods, e.g., undefined/functions, as
 *  done, for example, by JSON.stringify
 */
 SAJJ.prototype.ignoreHandler = function ignoreHandler (obj, parentObj, parentKey, parentObjectArrayBool) {
@@ -650,14 +650,14 @@ SAJJ.prototype.endArrayHandler = function endArrayHandler (value, parentObject, 
 };
 
 /**
-* Can override to avoid delegating to separate array/object handlers; see detectArrayType notes 
-*   for a means to treat objectHandler/arrayHandler as the same; overridden optionally in 
+* Can override to avoid delegating to separate array/object handlers; see detectArrayType notes
+*   for a means to treat objectHandler/arrayHandler as the same; overridden optionally in
 *   constructor by keyValueDistinguishedHandler
 */
 
 // Todo: override for TreeWalker/JSONValueIterator (or make it identical if possible as the scalar version)
 
-SAJJ.prototype.keyValueHandler = function keyValueHandler (value, key, parentObject, parentKey, parentObjectArrayBool, 
+SAJJ.prototype.keyValueHandler = function keyValueHandler (value, key, parentObject, parentKey, parentObjectArrayBool,
                                                             arrayBool, iterCt) {
     if (arrayBool) {
         this.arrayKeyValueHandler(value, key, parentObject, parentKey, parentObjectArrayBool);

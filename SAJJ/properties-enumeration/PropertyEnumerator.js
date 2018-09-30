@@ -40,28 +40,28 @@ PropertyRetriever.prototype.getOwnEnumerablesAndNonenumerables = function () {
 };
 
 PropertyRetriever.prototype.getPrototypeEnumerables = function () {
-    var obj = this.obj;
-    
+    // var obj = this.obj;
+
 };
 PropertyRetriever.prototype.getPrototypeNonenumerables = function () {
-    var obj = this.obj;
-    
+    // var obj = this.obj;
+
 };
 PropertyRetriever.prototype.getPrototypeEnumerablesAndNonenumerables = function () {
-    var obj = this.obj;
+    // var obj = this.obj;
 
 };
 
 PropertyRetriever.prototype.getOwnAndPrototypeEnumerables = function () {
-    var obj = this.obj;
-    
+    // var obj = this.obj;
+
 };
 PropertyRetriever.prototype.getOwnAndPrototypeNonenumerables = function () {
-    var obj = this.obj;
+    // var obj = this.obj;
 
 };
 PropertyRetriever.prototype.getOwnAndPrototypeEnumerablesAndNonenumerables = function () {
-    var obj = this.obj;
+    // var obj = this.obj;
 
 };
 

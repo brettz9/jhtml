@@ -28,7 +28,7 @@ Stringifier.prototype.endArrayHandler = function endArrayHandler (value, parentO
 // JSON terminal key handler methods
 
 Stringifier.prototype.objectKeyHandler = function (key, parentObject, parentKey, parentObjectArrayBool, iterCt) {
-    return '"' + key.replace(/"/g, '\\"') + '":';
+    return '"' + key.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '":';
 };
 Stringifier.prototype.arrayKeyHandler = function (key, parentObject, parentKey, parentObjectArrayBool) {
     return '';
