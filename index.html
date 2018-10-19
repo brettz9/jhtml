@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html xmlns="http:/www.w3.org/1999/xhtml">
+<html>
 <head>
     <meta charset="utf-8" />
     <title>JHTML demo</title>
-    <link rel="stylesheet" type="text/css" href="jhtml.css" />
-    <link rel="stylesheet" type="text/css" href="ribbon.css" />
+    <link rel="stylesheet" href="jhtml.css" />
+    <link rel="stylesheet" href="ribbon.css" />
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
     <script src="SAJJ/SAJJ.js"></script>
     <script src="SAJJ/SAJJ.ObjectArrayDelegator.js"></script>
     <script src="SAJJ/SAJJ.Stringifier.js"></script>
-    <script src="jhtml.js"></script>
+    <script src="src/jhtml.js"></script>
 </head>
 <body>
 <div class="ribbon">
@@ -16,7 +17,8 @@
 </div>
 <p>See also this <a href="JSON2JHTML.html">demo</a> on conversion into JHTML (from JSON).</p>
 
-<dl itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2" xmlns="http:/www.w3.org/1999/xhtml">
+<dl itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2"
+    xmlns="http:/www.w3.org/1999/xhtml">
     <dt>string-key</dt>
     <dd>a string (no child element needed for this primitive as string is the default)</dd>
     <dt>boolean-key</dt>
@@ -46,7 +48,7 @@
 
 <textarea id="JHTML-output" rows="3" cols="100"></textarea>
 <script>
-document.getElementById('JHTML-output').value = JHTML.toJSONString();
+document.querySelector('#JHTML-output').value = JHTML.toJSONString();
 </script>
 
 </body>

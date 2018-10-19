@@ -6,7 +6,6 @@
 <head>
 <style>
 
-
 </style>
 </head>
 <body>
@@ -15,10 +14,14 @@
 <p>Type</p>
 
 <script>
-var ni = document.createNodeIterator(document, NodeFilter.SHOW_PROCESSING_INSTRUCTION, function (node) {
-    alert(node) 
+const ni = document.createNodeIterator(
+  document,
+  NodeFilter.SHOW_PROCESSING_INSTRUCTION,
+  function (node) {
+    alert(node)
     return NodeFilter.FILTER_ACCEPT;
-});
+  }
+);
 
 ni.nextNode()
 

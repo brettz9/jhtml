@@ -12,7 +12,8 @@
 <body>
 <p>See also this <a href="index.html">demo</a> on conversion from JHTML (into JSON).</p>
 <script>
-
+/* eslint-disable yoda */
+/* globals write, JHTML, validateAndWrite, elementFromString */
 
 write(null === JHTML.toJSONObject([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">null</i>')]));
 write(true === JHTML.toJSONObject([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">true</i>')]));
@@ -44,13 +45,12 @@ write('');
 validateAndWrite(JHTML.toJHTMLString(['childItem', 'childWith"Dbl"Quotes']));
 write('');
 validateAndWrite(
-    JHTML.toJHTMLString({a: null, b: true, c: 3, d: ['childItem', 'childWith"Dbl"Quotes'], e: {nested: true, another: false}, f: Infinity})
+  JHTML.toJHTMLString({a: null, b: true, c: 3, d: ['childItem', 'childWith"Dbl"Quotes'], e: {nested: true, another: false}, f: Infinity})
 );
 write('');
 validateAndWrite(
-    JHTML.toJHTMLString({a: null, b: true, c: 3, d: ['childItem', 'childWith"Dbl"Quotes'], e: {nested: true, another: false}, f: Infinity, g: undefined, h: function () {}}, {mode: 'JavaScript'})
+  JHTML.toJHTMLString({a: null, b: true, c: 3, d: ['childItem', 'childWith"Dbl"Quotes'], e: {nested: true, another: false}, f: Infinity, g: undefined, h () {}}, {mode: 'JavaScript'})
 );
-
 </script>
 </body>
 </html>

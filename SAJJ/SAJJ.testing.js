@@ -1,17 +1,16 @@
-function write (txt) {'use strict';
-    document.body.appendChild(document.createTextNode(txt));
-    document.body.appendChild(document.createElement('br'));
+export function write (txt) {
+  document.body.append(txt, document.createElement('br'));
 }
-function validate (txt) {'use strict';
-    try {
-        JSON.parse(txt);
-    }
-    catch(e) {
-        write('error validating JSON:' + e);
-        return;
-    }
+
+export function validate (txt) {
+  try {
+    JSON.parse(txt);
+  } catch (e) {
+    write('error validating JSON:' + e);
+  }
 }
-function validateAndWrite (txt) {'use strict';
-    validate(txt);
-    write(txt);
+
+export function validateAndWrite (txt) {
+  validate(txt);
+  write(txt);
 }

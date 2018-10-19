@@ -24,13 +24,13 @@ PropertyMapper.prototype.mapPrototypeEnumerablesAndNonenumerables = function (cb
 };
 
 PropertyMapper.prototype.mapOwnAndPrototypeEnumerables = function (cb) {
-    var obj = this.obj;
+  const obj = this.obj;
 
-    var ret = [];
-    for (var prop in obj) {
-        ret.push(cb(obj[prop], prop, obj));
-    }
-    return ret;
+  const ret = [];
+  for (const prop in obj) {
+    ret.push(cb(obj[prop], prop, obj));
+  }
+  return ret;
 };
 PropertyMapper.prototype.mapOwnAndPrototypeNonenumerables = function (cb) {
 
