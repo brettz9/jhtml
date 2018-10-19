@@ -4,23 +4,36 @@
     <meta charset="utf-8" />
     <title>JHTML Test Suite</title>
 
-    <!-- JHTML dependencies -->
-    <script src="../SAJJ/SAJJ.js"></script>
-    <script src="../SAJJ/SAJJ.ObjectArrayDelegator.js"></script>
-    <script src="../SAJJ/SAJJ.Stringifier.js"></script>
-    <script src="../jhtml.js"></script>
-
     <!-- Testing dependencies -->
-    <link rel="stylesheet" href="../node_modules/nodeunit/share/nodeunit.css" type="text/css" />
-    <script src="../node_modules/nodeunit/examples/browser/nodeunit.js"></script>
-    <script src="jhtmlTests.js"></script>
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "chai": "../node_modules/chai/index.js",
+          "mocha": "../node_modules/mocha/mocha.js"
+        }
+      }
+    </script>
+    <script src="../node_modules/mocha/mocha.js"></script>
+
+    <!-- JHTML dependencies -->
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
   </head>
   <body>
-    <h1 id="nodeunit-header">JHTML Test Suite</h1>
-    <script>
-      nodeunit.run({
-        'Suite One': jhtmlTests
-      });
+    <h1>JHTML Test Suite</h1>
+    <div id="mocha"></div>
+    <script type="module">
+      import 'mocha';
+      import {assert} from 'chai';
+      mocha.setup('bdd');
+      globalThis.assert = assert;
+      mocha.globals(['JHTML']);
+    </script>
+
+    <!-- Tests -->
+    <script type="module">
+      import './test.jhtml.js';
+      mocha.run();
     </script>
   </body>
 </html>

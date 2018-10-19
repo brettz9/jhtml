@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>JSL Demo</title>
+<script src="jsl.js"></script>
+<script>
+/* globals JSL */
+window.addEventListener('load', function () {
+  /*
+  const result = new JSL().match({
+    '/' () {
+      return '<body>' + this.applyTemplates('mode2') + '</body>';
+    },
+    'a' () {
+      return '<a/>';
+    },
+    'div' : {
+      'mode1' () {
+        return '<div class="_1"/>';
+      },
+      'mode2' () {
+        return '<div class="_2"/>';
+      }
+    }
+  }); */
+
+  /*
+  function string ({textContent}) {
+    return textContent;
+  }
+  */
+
+  const result = new JSL().variables({
+    myVar1: 'someValue'
+  }).named({
+    italicize: (node) => '<i>' + node + '</i>',
+    bold: {
+      b: (node) => '<b>' + node + '</b>',
+      span: (node) => '<span style="font-weight:bold">' + node + '</span>'
+    }
+  }).match({
+    '/' () {
+      return '<body>' +
+        this.call('bold', 'span', ['text' + this.vars.myVar1]) +
+        /* this.foreach('a', function ()  // Could make foreach chainable using valueOf, etc. in subsequent chain
+          '<span>' + this.call('italicize', [this.valueOf('.')]) + '</span>'
+        ) + */
+        this.apply('mode2') +
+      '</body>';
+    },
+    a: (a) => '<a></a>',
+    div: {
+      mode1: () => '<div class="_1"/>',
+      mode2 () {
+        return '<div class="_2"/>' + this.foreach('. span', function () { // Could make foreach chainable using valueOf, etc. in subsequent chain
+          return '<span>' + this.call('italicize', [this.valueOf('.')]) + '</span>';
+        });
+      }
+    }
+  });
+  // */
+  // Fix: need to be able to stop templates!!! (and apply within copy(), etc.)
+  // Fix: need to be able to sort inside foreach's or applyTemplate's (second argument to these)
+
+  // alert((document.documentElement.textContent || document.documentElement.innerText));
+
+  // eslint-disable-next-line no-alert
+  alert(result);
+});
+</script>
+</head>
+
+<body>
+<a>test</a>
+<a>test2</a>
+
+<div><span>woohoo!</span></div>
+<div></div>
+
+</body>
+</html>

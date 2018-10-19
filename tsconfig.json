@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "moduleResolution": "nodenext",
+    "module": "NodeNext",
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "strict": true
+  },
+  "include": ["*.js", "src/*.js", "src/SAJJ/*.js", "test/*.js", "src/SAJJ/testing/*.js"],
+  "exclude": ["node_modules", "rollup.config.js"]
+}

@@ -1,1 +1,3 @@
 node_modules
+coverage
+.eslint-config-inspector

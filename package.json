@@ -1,34 +1,84 @@
 {
-    "name": "jhtml",
-    "version": "0.5.0",
-    "author": {
-        "name": "Brett Zamir",
-        "email": "brettz9@yahoo.com",
-        "url": "http://brett-zamir.me"
-    },
-    "contributors": [],
-    "dependencies": {},
-    "devDependencies": {},
-    "scripts": {
-        "test": "node ./node_modules/nodeunit/bin/nodeunit test"
-    },
-    "engines": {
-        "node": "4.x"
-    },
-    "homepage": "https://github.com/brettz9/jhtml",
-    "description": "The JHTML format is a strict subset of HTML used to encode arbitrary JSON within HTML. This library seeks to provide conversions while simultaneously validating the indicated JHTML structure(s).",
-    "main": "./jhtml",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/brettz9/jhtml.git"
-    },
-    "keywords": [
-        "json",
-        "html"
-    ],
-    "license": "MIT",
-    "readmeFilename": "README.md",
-    "bugs": {
-        "url": "https://github.com/brettz9/jhtml/issues"
+  "name": "jhtml",
+  "version": "0.6.0",
+  "author": {
+    "name": "Brett Zamir",
+    "email": "brettz9@yahoo.com",
+    "url": "http://brett-zamir.me"
+  },
+  "contributors": [],
+  "type": "module",
+  "types": "./dist/jhtml.d.cts",
+  "main": "./dist/JHTML.js",
+  "exports": {
+    ".": {
+      "browser": {
+        "types": "./dist/jhtml-browser.d.ts",
+        "import": "./dist/JHTML-browser-esm.mjs",
+        "require": "./dist/JHTML-browser.js"
+      },
+      "node": {
+        "import": {
+          "types": "./dist/jhtml.d.mts",
+          "default": "./dist/JHTML-esm.mjs"
+        },
+        "require": {
+          "types": "./dist/jhtml.d.cts",
+          "default": "./dist/JHTML.js"
+        }
+      }
     }
+  },
+  "scripts": {
+    "prepublishOnly": "pnpm i && pnpm rollup",
+    "attw": "attw --pack",
+    "start": "static -p 8005",
+    "eslint": "eslint --ext=js,html,md .",
+    "lint": "npm run eslint",
+    "rollup": "rm -Rf dist && rollup -c && echo '{\"type\": \"commonjs\"}' > dist/package.json && tsc -p tsconfig-prod.json",
+    "mocha": "mocha",
+    "test": "c8 npm run mocha"
+  },
+  "browserslist": [
+    "last 2 chrome versions"
+  ],
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.2",
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@node-static/node-static": "^0.8.0",
+    "@rollup/plugin-babel": "^6.1.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@types/chai": "^5.2.3",
+    "@types/jsdom": "^27.0.0",
+    "@types/mocha": "^10.0.10",
+    "c8": "^10.1.3",
+    "chai": "^6.2.0",
+    "css.escape": "^1.5.1",
+    "eslint": "^9.39.1",
+    "eslint-config-ash-nazg": "^39.7.0",
+    "mocha": "^11.7.5",
+    "rollup": "^4.52.5",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22.16.0"
+  },
+  "homepage": "https://github.com/brettz9/jhtml",
+  "description": "The JHTML format is a strict subset of HTML used to encode arbitrary JSON within HTML. This library seeks to provide conversions while simultaneously validating the indicated JHTML structure(s).",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brettz9/jhtml.git"
+  },
+  "keywords": [
+    "json",
+    "html"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brettz9/jhtml/issues"
+  },
+  "dependencies": {
+    "jsdom": "^27.1.0"
+  }
 }

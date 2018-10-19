@@ -97,7 +97,7 @@ npm install jhtml
 ```
 
 ```js
-var JHTML = require('jhtml');
+import * as JHTML from 'jhtml';
 ```
 
 # Brower usage
@@ -106,14 +106,15 @@ var JHTML = require('jhtml');
 <script src="jhtml.js"></script>
 ```
 
-```javascript
+```js
 // The following code will look for all elements within the document
 // belonging to the JHTML itemtype namespace (currently:
 // http://brett-zamir.me/ns/microdata/json-as-html/1 ).
 // Alternatively, one may supply the items as the first (and only)
 // argument (there is no validation for namespace currently
 // in such a case).
-// These return a JSON array if multiple elements are found or a single object otherwise
+// These return a JSON array if multiple elements are found or a
+//   single object otherwise
 JHTML.toJSONObject(); // returns a JSON object
 JHTML.toJSONString(); // returns a JSON string
 ```
@@ -125,15 +126,6 @@ regular JSON in a similar manner or simply use JSON within
 your JavaScript). Do not merely add the style `display:none` as
 this will still cause your JHTML content to display for users
 who have disabled CSS.
-
-If you intend to support older browsers, you will need polyfills for:
-
-1. `Array.prototype.map`
-1. `Array.prototype.reduce`
-1. `Element.prototype.textContent`
-1. `Element.prototype.itemProp`
-1. `HTMLDocument.prototype.getItems`
-1. `Element.firstElementChild`
 
 # Possible future todos
 
@@ -213,8 +205,9 @@ The following are other possible changes:
 
 # To-dos
 
-1.  Switch from internal SAJJ dependency to external
+1. Migrate internal SAJJ dependency to external
     [dj](https://github.com/brettz9/dj) dependency.
+2. Add tests
 
 # Development
 

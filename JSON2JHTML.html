@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
     <meta charset="utf-8" />
     <title>JSON2JHTML test</title>
-    <script src="SAJJ/SAJJ.js"></script>
-    <script src="SAJJ/SAJJ.ObjectArrayDelegator.js"></script>
-    <script src="SAJJ/SAJJ.Stringifier.js"></script>
-    <script src="jhtml.js"></script>
-    <script src="jtml.testing.js"></script>
 </head>
 <body>
 <p>See also this <a href="index.html">demo</a> on conversion from JHTML (into JSON).</p>
-<script>
-
+<script type="module">
+/* eslint-disable yoda -- Easier to view */
+import * as JHTML from './src/jhtml.js';
+import {write, validateAndWrite, elementFromString} from './jhtml.testing.js';
 
 write(null === JHTML.toJSONObject([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">null</i>')]));
 write(true === JHTML.toJSONObject([elementFromString('<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">true</i>')]));
@@ -44,13 +41,12 @@ write('');
 validateAndWrite(JHTML.toJHTMLString(['childItem', 'childWith"Dbl"Quotes']));
 write('');
 validateAndWrite(
-    JHTML.toJHTMLString({a: null, b: true, c: 3, d: ['childItem', 'childWith"Dbl"Quotes'], e: {nested: true, another: false}, f: Infinity})
+  JHTML.toJHTMLString({a: null, b: true, c: 3, d: ['childItem', 'childWith"Dbl"Quotes'], e: {nested: true, another: false}, f: Infinity})
 );
 write('');
 validateAndWrite(
-    JHTML.toJHTMLString({a: null, b: true, c: 3, d: ['childItem', 'childWith"Dbl"Quotes'], e: {nested: true, another: false}, f: Infinity, g: undefined, h: function () {}}, {mode: 'JavaScript'})
+  JHTML.toJHTMLString({a: null, b: true, c: 3, d: ['childItem', 'childWith"Dbl"Quotes'], e: {nested: true, another: false}, f: Infinity, g: undefined, h () {}}, {mode: 'JavaScript'})
 );
-
 </script>
 </body>
 </html>
