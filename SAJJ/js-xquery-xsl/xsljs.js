@@ -90,7 +90,7 @@ function ProcessTemplates (ts) {
             false
         );
         while (treeWalker.nextNode()) {
-            treeWalker.currentNode; // use it
+            console.log(treeWalker.currentNode); // use it
         }
     }
     ts.$apply = function () {

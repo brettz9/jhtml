@@ -77,9 +77,10 @@
 
 */
 
+var define;
 if (typeof define === 'undefined' && typeof JSON !== 'undefined') {
     // We require json2.min.js to be added as a script tag to get access to it in non-requireJS/non-supporting environments
-    var define = function define (depends, obj) { // Allow stand-alone browser or CommonJS drop-in capability without requirejs
+    define = function define (depends, obj) { // Allow stand-alone browser or CommonJS drop-in capability without requirejs
         var exp = typeof exports === 'undefined' ? exports : this;
         exp.SAJJ = SAJJ;
         exp.SAJJ_JSON = SAJJ_JSON;
@@ -133,10 +134,12 @@ JSONTraverser.prototype._buildOptions = function _buildOptions (whatToShow, filt
 { // TreeWalker
 
 function JSONTreeWalker () {
+    /*
     this.root;
     this.filter;
     this.whatToShow;
     this.currentValue;
+    */
 }
 JSONTreeWalker.prototype.nextValue = function nextValue () {
 };
@@ -166,12 +169,14 @@ JSONTreeWalker.prototype.nextSibling = function () {
 
 { // Iterator
 function JSONValueIterator () {
+    /*
     this.root;
     this.filter;
     this.whatToShow;
     // Analogues to DOM4-specified properties
     this.referenceValue;
     this.pointerBeforeReferenceValue;
+    */
 }
 JSONValueIterator.prototype.nextValue = function nextValue () {
 };
@@ -308,7 +313,7 @@ SAJJ.prototype.setDefaultOptions = function setDefaultOptions (options) {
     // Analogue to step of DOM createNodeIterator and createTreeWalker
     this.whatToShow = options.whatToShow || JSONFilter.SHOW_ALL;
     this.filter = typeof options.filter === 'function' ?  {acceptValue: options.filter} : (options.filter || null);
-    
+
     // CUSTOM PROPERTIES
     this.mode = options.mode || 'JSON'; // Whether to support full JavaScript objects (with functions, undefined, nonfiniteNumbers) or JSON; will not distinguish object literals from other objects, but neither does JSON.stringify which ignores prototype and drops functions/undefined and converts nonfinite to null
 

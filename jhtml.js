@@ -259,7 +259,7 @@ endHandler: function (obj, parObj, parKey, parObjArrBool) {
 
         }});
 
-    if (exports === undefined) {
+    if (typeof exports === 'undefined') {
         window.JHTML = {};
         exp = window.JHTML;
     }
