@@ -34,7 +34,7 @@ SAJJ.createAndExport({name: 'Stringifier', exportObject: typeof module !== 'unde
     // JSON terminal key handler methods
 
     objectKeyHandler: function (key, parentObject, parentKey, parentObjectArrayBool, iterCt) {
-        return '"' + key.replace(/"/g, '\\"') + '":';
+        return '"' + key.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '":';
     },
     arrayKeyHandler: function (key, parentObject, parentKey, parentObjectArrayBool) {
         return '';
