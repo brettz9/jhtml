@@ -1,1 +1,1 @@
-export * as jhtml from './jhtml.js';
+export * from './jhtml.js';

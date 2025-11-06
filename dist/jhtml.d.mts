@@ -1,2 +1,2 @@
-export * as jhtml from './jhtml.js';
+export * from './jhtml.js';
 //# sourceMappingURL=jhtml.d.mts.map

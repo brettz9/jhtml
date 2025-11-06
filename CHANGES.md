@@ -1,5 +1,9 @@
 # CHANGES for jhtml
 
+## 0.6.2
+
+- fix: avoid exporting on child object
+
 ## 0.6.1
 
 - fix: change file casing
