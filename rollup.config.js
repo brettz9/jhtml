@@ -11,7 +11,7 @@ function getRollupConfig ({minifying = false, format = 'umd'} = {}) {
   const nonMinified = {
     input: 'src/jhtml.js',
     output: {
-      file: `dist/JHTML${
+      file: `dist/jhtml${
         format === 'esm' ? '-esm' : ''
       }${
         minifying ? '.min' : ''
@@ -42,7 +42,7 @@ function getRollupConfigForBrowser ({minifying = false, format = 'umd'} = {}) {
   const nonMinified = {
     input: 'src/jhtml-browser.js',
     output: {
-      file: `dist/JHTML-browser${
+      file: `dist/jhtml-browser${
         format === 'esm' ? '-esm' : ''
       }${
         minifying ? '.min' : ''

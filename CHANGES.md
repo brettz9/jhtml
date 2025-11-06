@@ -1,5 +1,9 @@
 # CHANGES for jhtml
 
+## 0.6.1
+
+- fix: change file casing
+
 ## 0.6.0
 
 - BREAKING CHANGES:

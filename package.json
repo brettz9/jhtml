@@ -1,6 +1,6 @@
 {
   "name": "jhtml",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": {
     "name": "Brett Zamir",
     "email": "brettz9@yahoo.com",
@@ -9,22 +9,22 @@
   "contributors": [],
   "type": "module",
   "types": "./dist/jhtml.d.cts",
-  "main": "./dist/JHTML.js",
+  "main": "./dist/jhtml.js",
   "exports": {
     ".": {
       "browser": {
         "types": "./dist/jhtml-browser.d.ts",
-        "import": "./dist/JHTML-browser-esm.mjs",
-        "require": "./dist/JHTML-browser.js"
+        "import": "./dist/jhtml-browser-esm.mjs",
+        "require": "./dist/jhtml-browser.js"
       },
       "node": {
         "import": {
           "types": "./dist/jhtml.d.mts",
-          "default": "./dist/JHTML-esm.mjs"
+          "default": "./dist/jhtml-esm.mjs"
         },
         "require": {
           "types": "./dist/jhtml.d.cts",
-          "default": "./dist/JHTML.js"
+          "default": "./dist/jhtml.js"
         }
       }
     }
