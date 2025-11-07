@@ -1,6 +1,6 @@
 {
   "name": "jhtml",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "author": {
     "name": "Brett Zamir",
     "email": "brettz9@yahoo.com",
@@ -19,13 +19,23 @@
       },
       "node": {
         "import": {
-          "types": "./dist/jhtml.d.mts",
-          "default": "./dist/jhtml-esm.mjs"
+          "types": "./dist/jhtml-node.d.mts",
+          "default": "./dist/jhtml-node-esm.mjs"
         },
         "require": {
-          "types": "./dist/jhtml.d.cts",
-          "default": "./dist/jhtml.js"
+          "types": "./dist/jhtml-node.d.cts",
+          "default": "./dist/jhtml-node.js"
         }
+      }
+    },
+    "./jhtml.js": {
+      "import": {
+        "types": "./dist/jhtml.d.mts",
+        "default": "./dist/jhtml-esm.mjs"
+      },
+      "require": {
+        "types": "./dist/jhtml.d.cts",
+        "default": "./dist/jhtml.js"
       }
     }
   },

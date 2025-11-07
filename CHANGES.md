@@ -1,5 +1,9 @@
 # CHANGES for jhtml
 
+## 0.7.0
+
+- feat: provide export for Node with pre-set jsdom window
+
 ## 0.6.2
 
 - fix: avoid exporting on child object
