@@ -410,28 +410,44 @@ class JHTMLStringifier extends ObjectArrayDelegator {
   //   required for JSON mode)
   /**
    * @param {GenericFunction} value
+   * @param {object|undefined} parentObject
    * @returns {string}
    */
   functionHandler (
-    value /* , parentObject, parentKey, parentObjectArrayBool */
+    value, parentObject /* , parentKey, parentObjectArrayBool */
   ) {
     // May not be supported everywhere
-    return '<i>' + escapeHTMLText(value.toString()) + '</i>';
+    const str = escapeHTMLText(value.toString());
+    if (!parentObject) {
+      return str;
+    }
+    return '<i>' + str + '</i>';
   }
 
   /**
+   * @param {undefined} value
+   * @param {object|undefined} parentObject
    * @returns {string}
    */
-  undefinedHandler (/* parentObject, parentKey, parentObjectArrayBool */) {
+  undefinedHandler (
+    value, parentObject /* , parentKey, parentObjectArrayBool */
+  ) {
+    if (!parentObject) {
+      return 'undefined';
+    }
     return '<i>undefined</i>';
   }
   /**
    * @param {number} value
+   * @param {object|undefined} parentObject
    * @returns {string}
    */
   nonfiniteNumberHandler (
-    value /* , parentObject, parentKey, parentObjectArrayBool */
+    value, parentObject /* , parentKey, parentObjectArrayBool */
   ) {
+    if (!parentObject) {
+      return String(value);
+    }
     return '<i>' + String(value) + '</i>';
   }
 

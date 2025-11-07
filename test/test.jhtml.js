@@ -429,6 +429,160 @@ describe('`JHTML` tests', function () {
       }
     );
   });
+
+  describe('toJHTMLDOM with primitives', () => {
+    it('should handle null primitive', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">null</i>';
+      const element = JHTML.toJHTMLDOM(null);
+      assert.deepEqual(element.outerHTML, expected);
+    });
+
+    it('should handle boolean primitives', () => {
+      const expectedTrue = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">true</i>';
+      const elementTrue = JHTML.toJHTMLDOM(true);
+      assert.deepEqual(elementTrue.outerHTML, expectedTrue);
+
+      const expectedFalse = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">false</i>';
+      const elementFalse = JHTML.toJHTMLDOM(false);
+      assert.deepEqual(elementFalse.outerHTML, expectedFalse);
+    });
+
+    it('should handle number primitives', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">123.45</i>';
+      const element = JHTML.toJHTMLDOM(123.45);
+      assert.deepEqual(element.outerHTML, expected);
+    });
+
+    it('should handle string primitives', () => {
+      const expected = '<span itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">hello world</span>';
+      const element = JHTML.toJHTMLDOM('hello world');
+      assert.deepEqual(element.outerHTML, expected);
+    });
+
+    it('should handle undefined in JavaScript mode', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">undefined</i>';
+      const element = JHTML.toJHTMLDOM(undefined, {mode: 'JavaScript'});
+      assert.deepEqual(element.outerHTML, expected);
+    });
+
+    it('should handle Infinity in JavaScript mode', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">Infinity</i>';
+      const element = JHTML.toJHTMLDOM(Infinity, {mode: 'JavaScript'});
+      assert.deepEqual(element.outerHTML, expected);
+    });
+
+    it('should handle -Infinity in JavaScript mode', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">-Infinity</i>';
+      const element = JHTML.toJHTMLDOM(-Infinity, {mode: 'JavaScript'});
+      assert.deepEqual(element.outerHTML, expected);
+    });
+
+    it('should handle NaN in JavaScript mode', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">NaN</i>';
+      const element = JHTML.toJHTMLDOM(Number.NaN, {mode: 'JavaScript'});
+      assert.deepEqual(element.outerHTML, expected);
+    });
+
+    it('should throw for undefined without JavaScript mode', () => {
+      assert.throws(
+        () => {
+          JHTML.toJHTMLDOM(undefined);
+        },
+        'Values of type "undefined" are only allowed in JavaScript ' +
+          'mode, not JSON.'
+      );
+    });
+
+    it('should handle function in JavaScript mode', () => {
+      /**
+       * @returns {number}
+       */
+      // eslint-disable-next-line @stylistic/brace-style -- Serialized
+      function testFunc () { return 42; }
+      const element = JHTML.toJHTMLDOM(testFunc, {mode: 'JavaScript'});
+      assert.match(
+        element.outerHTML,
+        /<i itemscope="" itemtype="http:\/\/brett-zamir\.me\/ns\/microdata\/json-as-html\/2">function testFunc \(\) \{ return 42; \}<\/i>/v
+      );
+    });
+  });
+
+  describe('toJHTMLString with primitives', () => {
+    it('should handle null primitive', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">null</i>';
+      const result = JHTML.toJHTMLString(null);
+      assert.deepEqual(result, expected);
+    });
+
+    it('should handle boolean primitives', () => {
+      const expectedTrue = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">true</i>';
+      const resultTrue = JHTML.toJHTMLString(true);
+      assert.deepEqual(resultTrue, expectedTrue);
+
+      const expectedFalse = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">false</i>';
+      const resultFalse = JHTML.toJHTMLString(false);
+      assert.deepEqual(resultFalse, expectedFalse);
+    });
+
+    it('should handle number primitives', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">123.45</i>';
+      const result = JHTML.toJHTMLString(123.45);
+      assert.deepEqual(result, expected);
+    });
+
+    it('should handle string primitives', () => {
+      const expected = '<span itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">hello world</span>';
+      const result = JHTML.toJHTMLString('hello world');
+      assert.deepEqual(result, expected);
+    });
+
+    it('should handle undefined in JavaScript mode', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">undefined</i>';
+      const result = JHTML.toJHTMLString(undefined, {mode: 'JavaScript'});
+      assert.deepEqual(result, expected);
+    });
+
+    it('should handle Infinity in JavaScript mode', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">Infinity</i>';
+      const result = JHTML.toJHTMLString(Infinity, {mode: 'JavaScript'});
+      assert.deepEqual(result, expected);
+    });
+
+    it('should handle -Infinity in JavaScript mode', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">-Infinity</i>';
+      const result = JHTML.toJHTMLString(-Infinity, {mode: 'JavaScript'});
+      assert.deepEqual(result, expected);
+    });
+
+    it('should handle NaN in JavaScript mode', () => {
+      const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">NaN</i>';
+      const result = JHTML.toJHTMLString(Number.NaN, {mode: 'JavaScript'});
+      assert.deepEqual(result, expected);
+    });
+
+    it('should throw for undefined without JavaScript mode', () => {
+      assert.throws(
+        () => {
+          JHTML.toJHTMLString(undefined);
+        },
+        'Values of type "undefined" are only allowed in ' +
+          'JavaScript mode, not JSON.'
+      );
+    });
+
+    it('should handle function in JavaScript mode', () => {
+      /**
+       * @returns {number}
+       */
+      // eslint-disable-next-line @stylistic/brace-style -- Serialized
+      function testFunc () { return 42; }
+      const result = JHTML.toJHTMLString(testFunc, {mode: 'JavaScript'});
+      assert.match(
+        result,
+        /<i itemscope="" itemtype="http:\/\/brett-zamir\.me\/ns\/microdata\/json-as-html\/2">function testFunc \(\) \{ return 42; \}<\/i>/v
+      );
+    });
+  });
 });
 
 describe('`JHTML` tests with prepopulated HTML', () => {

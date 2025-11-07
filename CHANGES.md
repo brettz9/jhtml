@@ -1,5 +1,9 @@
 # CHANGES for jhtml
 
+## 0.7.1
+
+- fix(toJTHMLDOM/toJHTMLString): support primitives
+
 ## 0.7.0
 
 - feat: provide export for Node with pre-set jsdom window
