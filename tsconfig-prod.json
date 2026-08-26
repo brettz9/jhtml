@@ -12,6 +12,7 @@
     "emitDeclarationOnly": true,
     "strict": true,
     "target": "es2024",
+    "rootDir": "src",
     "outDir": "dist"
   },
   "include": ["src/*.js", "src/SAJJ/*.js", "src/*.mts", "src/*.cts"],

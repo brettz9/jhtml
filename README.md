@@ -140,7 +140,7 @@ who have disabled CSS.
 # Possible future spec additions
 
 The following might perhaps be allowed in conjunction with
-[JSON Schema](http://json-schema.org/), although I would also like to
+[JSON Schema](https://json-schema.org/), although I would also like to
 allow optional encoding of non-JSON JavaScript objects as well.
 
 1. This could be expanded to support types like: URL, Date, etc.

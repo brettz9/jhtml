@@ -1,15 +1,17 @@
-export default ObjectArrayDelegator;
+import SAJJ from './SAJJ.js';
 export type AnyDelegated = any;
 /**
  * @typedef {any} AnyDelegated
  */
 /**
-* @abstract
-* @class
-* @todo Might add an add() method which defines how to combine result values
-*  (so as to allow for other means besides string concatenation)
-*/
+ * @abstract
+ * @class
+ * @todo Might add an add() method which defines how to combine result values
+ *  (so as to allow for other means besides string concatenation)
+ */
 declare class ObjectArrayDelegator extends SAJJ {
+    currentKey: string | number | undefined;
+    currentObject: any;
     /**
      * @returns {AnyDelegated}
      */
@@ -48,8 +50,37 @@ declare class ObjectArrayDelegator extends SAJJ {
      * @returns {AnyDelegated}
      */
     endArrayHandler(value: AnyDelegated[], parentObject: object | undefined, parentKey: string | undefined, parentObjectArrayBool: boolean | undefined, arrLength: number): AnyDelegated;
-    currentKey: string | number | undefined;
-    currentObject: any;
+    /**
+     * @param {AnyDelegated} value
+     * @param {object|undefined} parentObject
+     * @param {string|undefined} parentKey
+     * @param {boolean|undefined} parentObjectArrayBool
+     * @returns {string}
+     */
+    objectHandler(value: AnyDelegated, parentObject: object | undefined, parentKey: string | undefined, parentObjectArrayBool: boolean | undefined): string;
+    /**
+     * @param {AnyDelegated[]} value
+     * @param {object|undefined} parentObject
+     * @param {string|undefined} parentKey
+     * @param {boolean|undefined} parentObjectArrayBool
+     * @returns {string}
+     */
+    arrayHandler(value: AnyDelegated[], parentObject: object | undefined, parentKey: string | undefined, parentObjectArrayBool: boolean | undefined): string;
+    /**
+     * Can override to avoid delegating to separate array/object handlers; see
+     *   `isArrayType` notes for a means to treat `objectHandler`/`arrayHandler`
+     *   as the same; overridden optionally in constructor by
+     *   `keyValueDistinguishedHandler`.
+     * @param {object} value
+     * @param {string|number} key
+     * @param {object|undefined} parentObject
+     * @param {string|undefined} parentKey
+     * @param {boolean|undefined} parentObjectArrayBool
+     * @param {boolean} arrayBool
+     * @param {number} [iterCt]
+     * @returns {string}
+     */
+    keyValueHandler(value: object, key: string | number, parentObject: object | undefined, parentKey: string | undefined, parentObjectArrayBool: boolean | undefined, arrayBool: boolean, iterCt?: number): string;
     /**
      * @param {AnyDelegated} value
      * @param {string|number} key
@@ -69,6 +100,18 @@ declare class ObjectArrayDelegator extends SAJJ {
      * @returns {AnyDelegated}
      */
     objectKeyValueHandler(value: AnyDelegated, key: string | number, parentObject: object | undefined, parentKey: string | undefined, parentObjectArrayBool: boolean | undefined, iterCt?: number): AnyDelegated;
+    /**
+     * Constructor may use this to override `keyValueHandler`.
+     * @param {AnyDelegated} value
+     * @param {string} key
+     * @param {object|undefined} parentObject
+     * @param {string|undefined} parentKey
+     * @param {boolean|undefined} parentObjectArrayBool
+     * @param {boolean} arrayBool
+     * @param {number} iterCt
+     * @returns {string}
+     */
+    keyValueDistinguishedHandler(value: AnyDelegated, key: string, parentObject: object | undefined, parentKey: string | undefined, parentObjectArrayBool: boolean | undefined, arrayBool: boolean, iterCt: number): string;
     /**
      * @param {string|number} key
      * @param {object|undefined} parentObject
@@ -110,5 +153,5 @@ declare class ObjectArrayDelegator extends SAJJ {
      */
     arrayValueHandler(value: AnyDelegated[], key: string, parentObject: object | undefined, parentKey: string | undefined, parentObjectArrayBool: boolean | undefined): AnyDelegated;
 }
-import SAJJ from './SAJJ.js';
+export default ObjectArrayDelegator;
 //# sourceMappingURL=SAJJ.ObjectArrayDelegator.d.ts.map

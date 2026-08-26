@@ -1,4 +1,5 @@
 /* globals CSS -- Polyfill */
+/* eslint-disable unicorn/prefer-https -- Old style namespace */
 import {assert} from 'chai';
 import {JSDOM} from 'jsdom';
 import * as JHTML from '../src/jhtml.js';
@@ -479,7 +480,7 @@ describe('`JHTML` tests', function () {
 
     it('should handle NaN in JavaScript mode', () => {
       const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">NaN</i>';
-      const element = JHTML.toJHTMLDOM(Number.NaN, {mode: 'JavaScript'});
+      const element = JHTML.toJHTMLDOM(NaN, {mode: 'JavaScript'});
       assert.deepEqual(element.outerHTML, expected);
     });
 
@@ -556,7 +557,7 @@ describe('`JHTML` tests', function () {
 
     it('should handle NaN in JavaScript mode', () => {
       const expected = '<i itemscope="" itemtype="http://brett-zamir.me/ns/microdata/json-as-html/2">NaN</i>';
-      const result = JHTML.toJHTMLString(Number.NaN, {mode: 'JavaScript'});
+      const result = JHTML.toJHTMLString(NaN, {mode: 'JavaScript'});
       assert.deepEqual(result, expected);
     });
 

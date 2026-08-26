@@ -100,6 +100,17 @@
 class SAJJ {
   ret = '';
 
+  /** @type {SAJJOptions|undefined} */
+  options;
+
+  /**
+   * @param {SAJJOptions} [options] See setDefaultOptions() function body for
+   *   some possibilities
+   */
+  constructor(options) {
+    this.setDefaultOptions(options);
+  }
+
   /* eslint-disable jsdoc/require-returns-check -- Abstract */
   /**
    * Could override for logging; meant for allowing dropping of
@@ -332,17 +343,6 @@ class SAJJ {
   }
   /* eslint-enable jsdoc/require-returns-check -- Abstract */
 
-  /**
-   * @param {SAJJOptions} options See setDefaultOptions() function body for
-   *   some possibilities
-   */
-  constructor(options) {
-    /** @type {SAJJOptions} */
-    // eslint-disable-next-line no-unused-expressions -- TS
-    this.options;
-    this.setDefaultOptions(options);
-  }
-
   // OPTIONS
   /**
    * @param {SAJJOptions} [options]
@@ -372,11 +372,11 @@ class SAJJ {
   }
 
   /**
-  * Rather than use the strategy design pattern, we'll override our prototype
-  *   selectively.
-  * @param {SAJJOptions} options
-  * @returns {void}
-  */
+   * Rather than use the strategy design pattern, we'll override our prototype
+   *   selectively.
+   * @param {SAJJOptions} options
+   * @returns {void}
+   */
   alterDefaultHandlers(options) {
     if (this.distinguishKeysValues) {
       this.keyValueHandler = this.keyValueDistinguishedHandler;
@@ -389,41 +389,41 @@ class SAJJ {
   // PUBLIC METHODS TO INITIATE PARSING
 
   /**
-  * For strings, one may wish to use Clarinet (<https://github.com/dscape/clarinet>) to
-  *   avoid extra overhead or parsing twice.
-  * @param {string} str The JSON string to be walked (after complete conversion
-  *   to an object)
-  * @param {object|object[]} [parentObject] The parent object or array
-  *   containing the string
-  * @param {string} [parentKey] The parent object or array's key
-  * @param {boolean} [parentObjectArrayBool] Whether the parent object is an
-  *   array (not another object)
-  * @returns {AnyValue}
-  */
+   * For strings, one may wish to use Clarinet (<https://github.com/dscape/clarinet>) to
+   *   avoid extra overhead or parsing twice.
+   * @param {string} str The JSON string to be walked (after complete conversion
+   *   to an object)
+   * @param {object|object[]} [parentObject] The parent object or array
+   *   containing the string
+   * @param {string} [parentKey] The parent object or array's key
+   * @param {boolean} [parentObjectArrayBool] Whether the parent object is an
+   *   array (not another object)
+   * @returns {AnyValue}
+   */
   walkJSONString(str, parentObject, parentKey, parentObjectArrayBool) {
     return this.walkJSONObject(JSON.parse(str), parentObject, parentKey, parentObjectArrayBool);
   }
 
   /**
-  *
-  * @param {import('../jhtml.js').JSONObject} obj The JSON object to walk
-  * @param {object|object[]} [parentObject] The parent object or array
-  *   containing the string
-  * @param {string} [parentKey] The parent object or array's key
-  * @param {boolean} [parentObjectArrayBool] Whether the parent object is an
-  *   array (not another object)
-  * @property {string|AnyValue} ret The intermediate return value (if any) from
-  *   beginHandler and delegateHandlersByType delegation
-  * @returns {string} The final return value including beginHandler and
-  *   delegateHandlersByType delegation plus any endHandler additions;
-  *   one may build one's own intermediate values, but "ret" should be
-  *   set to return the value
-  */
+   *
+   * @param {import('../jhtml.js').JSONObject} obj The JSON object to walk
+   * @param {object|object[]} [parentObject] The parent object or array
+   *   containing the string
+   * @param {string} [parentKey] The parent object or array's key
+   * @param {boolean} [parentObjectArrayBool] Whether the parent object is an
+   *   array (not another object)
+   * @property {string|AnyValue} ret The intermediate return value (if any) from
+   *   beginHandler and delegateHandlersByType delegation
+   * @returns {string} The final return value including beginHandler and
+   *   delegateHandlersByType delegation plus any endHandler additions;
+   *   one may build one's own intermediate values, but "ret" should be
+   *   set to return the value
+   */
   walkJSONObject(obj, parentObject, parentKey, parentObjectArrayBool) {
     this.root = obj;
-    const parObj = parentObject || this.options.parentObject,
-      parKey = parentKey || this.options.parentKey,
-      parObjArrBool = parentObjectArrayBool || this.options.parentObjectArrayBool || parObj && this.isArrayType(parObj);
+    const parObj = parentObject || this.options?.parentObject,
+      parKey = parentKey || this.options?.parentKey,
+      parObjArrBool = parentObjectArrayBool || this.options?.parentObjectArrayBool || parObj && this.isArrayType(parObj);
     this.ret = this.beginHandler(obj, parObj, parKey, parObjArrBool);
     this.ret += this.delegateHandlersByType(obj, parObj, parKey, parObjArrBool);
     this.ret += this.endHandler(obj, parObj, parKey, parObjArrBool);
@@ -562,23 +562,23 @@ class SAJJ {
   }
 
   /**
-  * Could override to always return false if one wished to merge
-  *   arrayHandler/objectHandler or, if in JSMode, to merge detectObjectType
-  *   and this isArrayType method. To merge arrayKeyValueHandler and
-  *   objectKeyValueHandler, see keyValueHandler.
-  * @param {AnyValue} obj
-  * @returns {boolean}
-  */
+   * Could override to always return false if one wished to merge
+   *   arrayHandler/objectHandler or, if in JSMode, to merge detectObjectType
+   *   and this isArrayType method. To merge arrayKeyValueHandler and
+   *   objectKeyValueHandler, see keyValueHandler.
+   * @param {AnyValue} obj
+   * @returns {boolean}
+   */
   isArrayType(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
   }
 
   /**
-  * Allow overriding to detect `Date`, `RegExp`, or other types (which will in
-  *   turn route to corresponding names).
-  * @param {AnyValue} obj
-  * @returns {"object"}
-  */
+   * Allow overriding to detect `Date`, `RegExp`, or other types (which will in
+   *   turn route to corresponding names).
+   * @param {AnyValue} obj
+   * @returns {"object"}
+   */
   detectObjectType(
   // eslint-disable-next-line no-unused-vars -- Signature
   obj) {
@@ -628,13 +628,12 @@ class SAJJ {
 /* eslint-enable jsdoc/reject-any-type -- Arbitrary */
 
 /**
-* @abstract
-* @class
-* @todo Might add an add() method which defines how to combine result values
-*  (so as to allow for other means besides string concatenation)
-*/
+ * @abstract
+ * @class
+ * @todo Might add an add() method which defines how to combine result values
+ *  (so as to allow for other means besides string concatenation)
+ */
 class ObjectArrayDelegator extends SAJJ {
-  /* eslint-disable jsdoc/require-returns-check -- Abstract */
   /**
    * @returns {AnyDelegated}
    */
@@ -693,7 +692,6 @@ class ObjectArrayDelegator extends SAJJ {
   value, parentObject, parentKey, parentObjectArrayBool, arrLength) {
     throw new Error('Abstract');
   }
-  /* eslint-enable jsdoc/require-returns-check -- Abstract */
 
   // It is probably not necessary to override the defaults for the following
   //   two methods and perhaps not any of the others either
@@ -720,12 +718,13 @@ class ObjectArrayDelegator extends SAJJ {
         }
       } else {
         for (const key in value) {
-          if (Object.hasOwn(value, key)) {
-            this.currentKey = key;
-            this.currentObject = value[key];
-            keyVals.push(this.keyValueHandler(value[key], key, value, parentKey, parentObjectArrayBool, false, i));
-            i++;
+          if (!Object.hasOwn(value, key)) {
+            continue;
           }
+          this.currentKey = key;
+          this.currentObject = value[key];
+          keyVals.push(this.keyValueHandler(value[key], key, value, parentKey, parentObjectArrayBool, false, i));
+          i++;
         }
       }
     }
@@ -1173,13 +1172,13 @@ function item2JSONObject(item, allowJS, throwOnSpan) {
           ret = -Infinity;
           break;
         case 'NaN':
-          ret = Number.NaN;
+          ret = NaN;
           break;
         default:
           {
             // number
             if (/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:e(?:[+\-])?\d+)?$/vi.test(textContent)) {
-              return Number.parseFloat(textContent);
+              return Number(textContent);
             }
             // function
             const funcMatch = textContent.match(/^function \w*\s*\(([\w, ]*)\) \{([\s\S]*)\}$/v);
@@ -1260,7 +1259,8 @@ function item2JSONObject(item, allowJS, throwOnSpan) {
           }
 
           /** @type {JSONObjectPlain} */
-          ret[key] = item2JSONObject(/** @type {Element} */node.children[0], allowJS, true);
+          // eslint-disable-next-line @stylistic/max-len -- Long
+          ret[key] = item2JSONObject(/** @type {Element} */ /** @type {Element} */node.firstElementChild, allowJS, true);
         });
         if (state !== 'dt') {
           throw new Error('Ended a definition list without a final <dd> to ' + 'match the previous <dt>.');
@@ -1291,7 +1291,8 @@ function item2JSONObject(item, allowJS, throwOnSpan) {
           ret.push(node.textContent);
         } else {
           /** @type {JSONObjectArray} */
-          ret.push(item2JSONObject(/** @type {Element} */node.children[0], allowJS, true));
+          ret.push(item2JSONObject(/** @type {Element} */
+          /** @type {Element} */node.firstElementChild, allowJS, true));
         }
       });
       return ret;
@@ -1307,7 +1308,8 @@ function escapeHTMLText(str) {
   return str.replaceAll('&', '&amp;').replaceAll('<', '&lt;');
 }
 
-// eslint-disable-next-line sonarjs/no-clear-text-protocols -- NS
+// eslint-disable-next-line @stylistic/max-len -- Long
+// eslint-disable-next-line unicorn/prefer-https, sonarjs/no-clear-text-protocols -- NS
 const jhtmlNs = 'http://brett-zamir.me/ns/microdata/json-as-html/2';
 
 /**
@@ -1438,12 +1440,6 @@ class JHTMLStringifier extends ObjectArrayDelegator {
     return escapeHTMLText(value);
   }
 
-  /* eslint-disable jsdoc/reject-function-type -- Generic */
-  /**
-   * @typedef {Function} GenericFunction
-   */
-  /* eslint-enable jsdoc/reject-function-type -- Generic */
-
   // JavaScript-only (non-JSON) (terminal) handler methods (not used or
   //   required for JSON mode)
   /**
@@ -1535,6 +1531,8 @@ let _win;
  * @returns {void}
  */
 const setWindow = win => {
+  // eslint-disable-next-line @stylistic/max-len -- Long
+  // eslint-disable-next-line unicorn/no-top-level-assignment-in-function -- Static
   _win = win;
 };
 
@@ -1546,9 +1544,12 @@ const setWindow = win => {
  * @returns {JSONObject}
  */
 const toJSONObject = function (items, options) {
-  options = options || {};
+  options ||= {};
   const isElement = items && !Array.isArray(items) && items.nodeType === 1;
-  const jsonHtml = isElement ? [items] : (/** @type {Element[]} */items || _win.document.querySelectorAll(`[itemtype=${_win.CSS.escape(jhtmlNs)}]`));
+  const jsonHtml = isElement ? [items] : (/** @type {Element[]} */items ||
+  // eslint-disable-next-line @stylistic/max-len -- Long
+  // eslint-disable-next-line unicorn/require-css-escape -- That's what this is doing
+  _win.document.querySelectorAll(`[itemtype=${_win.CSS.escape(jhtmlNs)}]`));
   const ret = [...jsonHtml].map(item => {
     return item2JSONObject(item, options.mode === 'JavaScript');
   });
@@ -1566,9 +1567,12 @@ const toJSONObject = function (items, options) {
  * @returns {string|string[]}
  */
 const toJSONString = function (items, options) {
-  options = options || {};
+  options ||= {};
   const isElement = items && !Array.isArray(items) && items.nodeType === 1;
-  const jsonHtml = isElement ? [items] : (/** @type {Element[]} */items || _win.document.querySelectorAll(`[itemtype=${_win.CSS.escape(jhtmlNs)}]`));
+  const jsonHtml = isElement ? [items] : (/** @type {Element[]} */items ||
+  // eslint-disable-next-line @stylistic/max-len -- Long
+  // eslint-disable-next-line unicorn/require-css-escape -- That's what this is doing
+  _win.document.querySelectorAll(`[itemtype=${_win.CSS.escape(jhtmlNs)}]`));
   const ret = [...jsonHtml].map(item => {
     const jsonObj = item2JSONObject(item, options.mode === 'JavaScript');
     const stringifier = new Stringifier(options);
@@ -1583,7 +1587,7 @@ const toJSONString = function (items, options) {
  * @returns {string}
  */
 const toJHTMLString = function (jsonObj, options) {
-  options = options || {};
+  options ||= {};
   options.distinguishKeysValues = true;
   const jhtmlStringifier = new JHTMLStringifier(options);
   return jhtmlStringifier.walkJSONObject(jsonObj);

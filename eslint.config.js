@@ -30,8 +30,10 @@ export default [
     rules: {
       'no-unused-vars': ['error', {varsIgnorePattern: 'JHTML'}],
       'no-shadow': 0,
-      'import/no-unresolved': ['error', {ignore: ['jhtml']}],
-      'import/unambiguous': 0
+      // 'import-x/no-unresolved': ['error', {ignore: ['jhtml']}],
+      'import-x/unambiguous': 0,
+      // Old-style namespace
+      'unicorn/prefer-https': 0
     }
   },
   {
@@ -41,7 +43,8 @@ export default [
       'no-empty-function': 0,
 
       // Disabling for now
-      'prefer-named-capture-group': 0
+      'prefer-named-capture-group': 0,
+      'unicorn/no-undeclared-class-members': 0
     }
   }
 ];

@@ -1,4 +1,15 @@
 /**
+ * Provides JSON.stringifier()-like functionality (no replacer or space
+ * arguments currently, however).
+ * This class uses the abstract `ObjectArrayDelegator` for
+ *   object/array delegating so the stringification can occur solely on
+ *   the terminal methods here.
+ * @todo Could implement our own stringifier for strings rather than using
+ *   `JSON.stringify`
+ */
+import ObjectArrayDelegator from './SAJJ.ObjectArrayDelegator.js';
+export type GenericFunction = Function;
+/**
  *
  */
 export default class Stringifier extends ObjectArrayDelegator {
@@ -34,6 +45,10 @@ export default class Stringifier extends ObjectArrayDelegator {
     /**
      * @returns {string}
      */
+    arrayKeyValueJoinerHandler(): string;
+    /**
+     * @returns {string}
+     */
     nullHandler(): string;
     /**
      * @param {boolean} value
@@ -57,7 +72,7 @@ export default class Stringifier extends ObjectArrayDelegator {
      * @param {GenericFunction} value
      * @returns {string}
      */
-    functionHandler(value: Function): string;
+    functionHandler(value: GenericFunction): string;
     /**
      * @returns {string}
      */
@@ -78,5 +93,4 @@ export default class Stringifier extends ObjectArrayDelegator {
      */
     nonfiniteNumberHandler(value: number): string;
 }
-import ObjectArrayDelegator from './SAJJ.ObjectArrayDelegator.js';
 //# sourceMappingURL=SAJJ.Stringifier.d.ts.map
