@@ -80,7 +80,7 @@ export type NonObject = undefined | null | boolean | number | string | GenericFu
 export type NestedObject = {
     [key: string]: NonObject | NestedObject | NestedObject[];
 };
-export type SAJJType = "undefined" | "null" | "boolean" | "symbol" | *   "number" | "nonfiniteNumber" | "bigint" | *   "string" | "function" | "array" | "object" | "ignore";
+export type SAJJType = "undefined" | "null" | "boolean" | "symbol" | "number" | "nonfiniteNumber" | "bigint" | "string" | "function" | "array" | "object" | "ignore";
 export type DelegateHandlers = (type: `${SAJJType}Handler`, parentObj: object | undefined, parentKey: string | undefined, parentObjectArrayBool?: boolean, obj?: AnyValue) => string;
 export type SAJJOptions = {
     mode?: "JSON" | "JavaScript";

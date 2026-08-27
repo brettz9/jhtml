@@ -1,5 +1,9 @@
 # CHANGES for jhtml
 
+## 0.7.3
+
+- fix(types): overcome JSDoc TS bug
+
 ## 0.7.2
 
 - fix(types): duplicate identifier

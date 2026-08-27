@@ -99,9 +99,9 @@
  */
 
 /**
- * @typedef {"undefined"|"null"|"boolean"|"symbol"|
- *   "number"|"nonfiniteNumber"|"bigint"|
- *   "string"|"function"|"array"|"object"|"ignore"} SAJJType
+ * @typedef {"undefined"|"null"|"boolean"|"symbol"
+ *   |"number"|"nonfiniteNumber"|"bigint"
+ *   |"string"|"function"|"array"|"object"|"ignore"} SAJJType
  */
 
 // PRIVATE STATIC UTILITIES
