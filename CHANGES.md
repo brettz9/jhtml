@@ -1,5 +1,10 @@
 # CHANGES for jhtml
 
+## 0.7.2
+
+- fix(types): duplicate identifier
+- chore: update jsdom, devDeps
+
 ## 0.7.1
 
 - fix(toJTHMLDOM/toJHTMLString): support primitives
