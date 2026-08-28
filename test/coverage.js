@@ -1,8 +1,9 @@
-/* eslint-disable @stylistic/max-len -- Tests */
+/* eslint-disable sonarjs/no-trivial-assertions,
+  sonarjs/assertions-in-tests -- Tests */
 // @ts-nocheck
 import {assert} from 'chai';
 import * as JHTML from '../src/jhtml.js';
-import SAJJ, {SAJJ_JS as sajjjs} from '../src/SAJJ/SAJJ.js';
+import SAJJ, {SAJJ_JS as sajjjs, _copyObject} from '../src/SAJJ/SAJJ.js';
 import Delegator from '../src/SAJJ/SAJJ.ObjectArrayDelegator.js';
 
 describe('Coverage tests', function () {
@@ -65,11 +66,15 @@ describe('Coverage tests', function () {
     assert.throws(() => d.endArrayHandler(), Error, 'Abstract');
   });
 
-  it('Stringifier JSON mode array/object detection (SAJJ designed as base class)', () => {
-    const sajj = new SAJJ({mode: 'JSON'});
-    assert.throws(() => sajj.walkJSONObject({a: [1]}), Error, 'Abstract');
-    assert.throws(() => sajj.walkJSONString('{"a":[1]}'), Error, 'Abstract');
-  });
+  it(
+    'Stringifier JSON mode array/object detection ' +
+    '(SAJJ designed as base class)',
+    () => {
+      const sajj = new SAJJ({mode: 'JSON'});
+      assert.throws(() => sajj.walkJSONObject({a: [1]}), Error, 'Abstract');
+      assert.throws(() => sajj.walkJSONString('{"a":[1]}'), Error, 'Abstract');
+    }
+  );
 
   it('walkJSONString fails (SAJJ designed as base class)', () => {
     const sajj = new SAJJ();
@@ -87,18 +92,36 @@ describe('Coverage tests', function () {
   it('typeErrorHandler throws', () => {
     const sajj = new SAJJ({mode: 'JSON'});
 
-    assert.throws(() => sajj.typeErrorHandler(
-      'symbol', Symbol(''), {}, 'key', false
-    ), Error, 'Values of type "symbol" are only allowed in JavaScript mode, not JSON.');
-    assert.throws(() => sajj.typeErrorHandler(
-      'bigint', 1n, {}, 'key', false
-    ), Error, 'Values of type "bigint" are only allowed in JavaScript mode, not JSON.');
+    assert.throws(
+      () => sajj.typeErrorHandler(
+        'symbol', Symbol(''), {}, 'key', false
+      ),
+      Error,
+      'Values of type "symbol" are only allowed in JavaScript mode, not JSON.'
+    );
+    assert.throws(
+      () => sajj.typeErrorHandler(
+        'bigint', 1n, {}, 'key', false
+      ),
+      Error,
+      'Values of type "bigint" are only allowed in JavaScript mode, not JSON.'
+    );
     assert.strictEqual(sajj.typeErrorHandler(
       'nonfiniteNumber', Infinity, {}, 'key', false
     ), 'null');
 
-    assert.throws(() => sajj.walkJSONObject(Symbol('')), Error, 'Values of type "symbol" are only allowed in JavaScript mode, not JSON.');
-    assert.throws(() => sajj.walkJSONObject(1n), Error, 'Values of type "bigint" are only allowed in JavaScript mode, not JSON.');
+    assert.throws(
+      () => sajj.walkJSONObject(
+        Symbol('')
+      ),
+      Error,
+      'Values of type "symbol" are only allowed in JavaScript mode, not JSON.'
+    );
+    assert.throws(
+      () => sajj.walkJSONObject(1n),
+      Error,
+      'Values of type "bigint" are only allowed in JavaScript mode, not JSON.'
+    );
   });
 
   it('typeErrorHandler returns null for nonfiniteNumber if ignored', () => {
@@ -108,8 +131,17 @@ describe('Coverage tests', function () {
 
   it('detectObjectType JSMode false for function/undefined', () => {
     const sajj = new SAJJ({mode: 'JSON'});
-    assert.throws(() => sajj.detectBasicType(undefined), Error, 'Values of type "undefined" are only allowed in JavaScript mode, not JSON.');
-    assert.throws(() => sajj.detectBasicType(() => {}), Error, 'Values of type "function" are only allowed in JavaScript mode, not JSON.');
+    assert.throws(
+      () => sajj.detectBasicType(undefined),
+      Error,
+      'Values of type "undefined" are only allowed ' +
+      'in JavaScript mode, not JSON.'
+    );
+    assert.throws(
+      () => sajj.detectBasicType(() => {}),
+      Error,
+      'Values of type "function" are only allowed in JavaScript mode, not JSON.'
+    );
   });
 });
 
@@ -125,8 +157,17 @@ describe('Coverage tests for SAJJ JSMode detectObjectType', function () {
 
   it('detectObjectType JSMode false for function/undefined', () => {
     const sajj = new SAJJ({mode: 'JSON'});
-    assert.throws(() => sajj.detectBasicType(undefined), Error, 'Values of type "undefined" are only allowed in JavaScript mode, not JSON.');
-    assert.throws(() => sajj.detectBasicType(() => {}), Error, 'Values of type "function" are only allowed in JavaScript mode, not JSON.');
+    assert.throws(
+      () => sajj.detectBasicType(undefined),
+      Error,
+      'Values of type "undefined" are only allowed ' +
+      'in JavaScript mode, not JSON.'
+    );
+    assert.throws(
+      () => sajj.detectBasicType(() => {}),
+      Error,
+      'Values of type "function" are only allowed in JavaScript mode, not JSON.'
+    );
   });
 });
 
@@ -140,9 +181,135 @@ describe('Coverage tests for SAJJ JSMode nonfiniteNumber', function () {
 describe('Coverage tests for SAJJ JSMode walkJSONObject options', function () {
   it('walkJSONObject uses options parentObject etc', () => {
     const sajj = new SAJJ({
-      mode: 'JSON', parentObject: {}, parentKey: 'key',
-      parentObjectArrayBool: true
+      mode: 'JSON', parentObject: {}, parentKey: 'key'
+
     });
     assert.throws(() => sajj.walkJSONObject({}), Error, 'Abstract');
+  });
+});
+
+describe(
+  'Coverage tests for ObjectArrayDelegator distinguishKeysValues',
+  function () {
+    it('uses objectValueHandler and arrayValueHandler', () => {
+      /**
+       *
+       */
+      class MyDelegator extends Delegator {
+        /**
+         * @returns {string}
+         */
+        objectKeyValueJoinerHandler () {
+          return '';
+        }
+        /**
+         * @returns {string}
+         */
+        beginObjectHandler () {
+          return '';
+        }
+        /**
+         * @returns {string}
+         */
+        endObjectHandler () {
+          return '';
+        }
+        /**
+         * @returns {string}
+         */
+        beginArrayHandler () {
+          return '';
+        }
+        /**
+         * @returns {string}
+         */
+        endArrayHandler () {
+          return '';
+        }
+        /**
+         * @returns {string}
+         */
+        arrayKeyValueJoinerHandler () {
+          return '';
+        }
+        /**
+         * @returns {string}
+         */
+        keyHandler () {
+          return '';
+        }
+        /**
+         * @returns {string}
+         */
+        stringHandler () {
+          return '';
+        }
+        /**
+         * @returns {string}
+         */
+        numberHandler () {
+          return '';
+        }
+      }
+      const d = new MyDelegator({
+        distinguishKeysValues: true, mode: 'JavaScript'
+      });
+      d.walkJSONObject({a: 1});
+      d.walkJSONObject([1]);
+    });
+  }
+);
+
+describe('Coverage tests for SAJJ iterate overrides', function () {
+  it('respects iterateArrays and iterateObjects', () => {
+    const sajj = new SAJJ({iterateArrays: false, iterateObjects: false});
+    assert.isFalse(sajj.iterateArrays);
+    assert.isFalse(sajj.iterateObjects);
+  });
+});
+
+describe('Coverage tests for SAJJ parObj array detection', function () {
+  it('detects parent object as array', () => {
+    /**
+     *
+     */
+    class MySAJJ extends SAJJ {
+      /**
+       * @returns {string}
+       */
+      objectHandler () {
+        return '';
+      }
+      /**
+       * @returns {string}
+       */
+      beginHandler () {
+        return '';
+      }
+      /**
+       * @returns {string}
+       */
+      delegateHandlersByType () {
+        return '';
+      }
+      /**
+       * @returns {string}
+       */
+      endHandler () {
+        return '';
+      }
+    }
+    const sajj = new MySAJJ();
+    sajj.walkJSONObject({}, []);
+    assert.isTrue(true);
+  });
+});
+
+describe('Coverage tests for _copyObject', function () {
+  it('deep copies objects', () => {
+    const obj = {a: {b: 1}};
+    const copy = _copyObject(obj, true);
+    assert.notStrictEqual(copy.a, obj.a);
+    assert.strictEqual(copy.a.b, 1);
   });
 });

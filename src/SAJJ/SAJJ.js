@@ -740,6 +740,6 @@ function SAJJ_JS (options) {
   return new SAJJ(newOpts);
 }
 
-export {SAJJ_JS};
+export {SAJJ_JS, _copyObject};
 
 export default SAJJ;

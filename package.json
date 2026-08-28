@@ -55,7 +55,7 @@
     "tsc": "tsc",
     "start": "static -p 8005",
     "eslint": "eslint --ext=js,html,md .",
-    "lint": "npm run eslint",
+    "lint": "npm run eslint --",
     "build": "pnpm rollup && tsc -p tsconfig-prod.json",
     "rollup": "rm -Rf dist && rollup -c && echo '{\"type\": \"commonjs\"}' > dist/package.json",
     "mocha": "mocha",
