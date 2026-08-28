@@ -50,13 +50,14 @@
     }
   },
   "scripts": {
-    "prepublishOnly": "pnpm i && pnpm rollup && pnpm attw",
+    "prepublishOnly": "pnpm i && pnpm build && pnpm attw",
     "attw": "attw --pack . --profile node16",
     "tsc": "tsc",
     "start": "static -p 8005",
     "eslint": "eslint --ext=js,html,md .",
     "lint": "npm run eslint",
-    "rollup": "rm -Rf dist && rollup -c && echo '{\"type\": \"commonjs\"}' > dist/package.json && tsc -p tsconfig-prod.json",
+    "build": "pnpm rollup && tsc -p tsconfig-prod.json",
+    "rollup": "rm -Rf dist && rollup -c && echo '{\"type\": \"commonjs\"}' > dist/package.json",
     "mocha": "mocha",
     "test": "c8 npm run mocha"
   },
