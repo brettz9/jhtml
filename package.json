@@ -61,6 +61,13 @@
     "mocha": "mocha",
     "test": "c8 npm run mocha"
   },
+  "c8": {
+    "check-coverage": true,
+    "lines": 100,
+    "functions": 100,
+    "branches": 100,
+    "statements": 100
+  },
   "browserslist": [
     "last 2 chrome versions"
   ],
