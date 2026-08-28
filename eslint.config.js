@@ -3,6 +3,7 @@ import ashNazg from 'eslint-config-ash-nazg';
 export default [
   {
     ignores: [
+      'coverage/*',
       'dist',
       '.eslint-config-inspector',
       'src/SAJJ/older'
